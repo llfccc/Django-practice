@@ -1,0 +1,110 @@
+{% extends "base.html" %} {% block title %} 查看关键事件 {% endblock%} {% block body %} {{ block.super }} {% load el_pagination_tags %}
+    {% load staticfiles %}
+    <script src="{% static 'js/jquery.jqprint-0.3.js' %}  "></script>
+    <script src="{% static 'js/jquery-migrate-1.1.0.js' %}  "></script>
+    <script src="{% static 'js/pdf.js' %}  "></script>
+    <script src="{% static 'Print.js/print.min.js' %}  "></script>
+    <link rel="stylesheet" type="text/css" href={% static 'Print.js/print.min.css' %}>
+
+    <script language="javascript">
+        function print() {
+            $("#printArea").jqprint();
+        }
+    </script>
+   <style type="text/css">   
+   #printArea {
+
+       word-wrap: break-word;
+   }
+
+    #printArea td{
+        border :1px solid 
+    }
+</style>  
+
+
+<block name="content">
+    <div class="container">
+        <div class="page-header">
+            <h2 align="center">打印关键事件</h2>
+        </div>
+        <br/>
+
+        <div class=" panel panel-success" >
+
+            <br/>
+            <p style="text-align:center;font-weight:bold;font-size: 25px">付款审批表</p>
+<div class="container-fluid ">
+                <div class="row">
+
+                    <div class="col-xs-12">
+
+                        <table  id="printArea"  width=700px border=1>
+                 
+                                <tr height="50" >
+                                    <td  width="150" >收款人</td>
+                                    <td >row 1, cell 2</td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                
+                                <tr>
+                                    <td height="70">付款用途</td>
+                                    <td width=100>购材料物资</td>
+                                    <td width=100>
+                                        开户银行及银行账号
+                                    </td>
+                                    <td>
+                                        工商银行
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>付款金额</td>
+                                    <td>人民币</td>
+                                    <td>
+                                        大写：叁仟叁佰
+                                    </td>
+                                    <td>
+                                        小写：3.239
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>总经理</td>
+                                    <td>row 1, cell 2</td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td>财务负责人</td>
+                                    <td>row 1, cell 2</td>
+                                                        <td></td>
+                                    <td></td>
+                                </tr>
+                  
+                        </table>
+
+                    </div>
+
+                </div>
+                <div class="row">
+                    <!--<div class="col-xs-1"></div>-->
+
+                    <div class="col-xs-6">
+                        <strong>Q/MWX F05001-2009 A/1</strong>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    </div>
+    <div class="container">
+        <button class="btn btn-info" onclick=" print()">打印</button>
+ <button type="button" onclick="printJS('printArea', 'html')">
+    Print Form
+ </button>
+    </div>
+
+    
+
+{% endblock body %}}

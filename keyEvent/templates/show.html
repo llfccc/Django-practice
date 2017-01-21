@@ -1,0 +1,65 @@
+<extend name="./App/Modules/Index/Tpl/Public/base" />
+<block name="title">
+    <title>关键事件登记</title>
+</block>
+<block name="js">
+    <!--<script type='text/javascript' src='/Public/js/_updateSupplier.js'></script>-->
+</block>
+
+<block name="content">
+    <div class="container">
+        <div class="page-header">
+            <h2 align="center">查看关键事件</h2>
+        </div>
+
+        <br/>
+
+        <div class=" panel panel-success">
+            <div class="panel-heading"><strong>关键事件信息</strong></div>
+            <br/>
+            <div class="container-fluid ">
+                <div class="row">
+                    <!--<form method='POST' class=" col-xs-4" action="{:U('SupplierList/show')}">-->
+                    <!--</form>-->
+                    <table class="table table-responsive table-bordered">
+                        <thead>
+                            <th>登记日期</th>
+                            <th>登记人</th>
+                            <th>供应商名称</th>
+                            <th>事件描述</th>
+                            <th>操作</th>
+                        </thead>
+                        <tbody>
+                            <foreach name="data" item="vo">
+                                <tr>
+                                    <td class="col-xs-1">{$vo.record_date}</td>
+                                    <td class="col-xs-1">{$vo.recorder}</td>
+                                    <td class="col-xs-2"> {$vo.supplier_name}</td>
+                                    <td class="col-xs-6">{$vo.event_description}</td>
+                                    <td>
+                                        <div class="">
+                                            <div>
+                                                <div>
+                                                    <a href="{:U('/Index/KeyEvent/edit',array('id'=>$vo['id']),'')}">
+                                                        <button class="btn btn-danger"><font
+                                                            color="#fffafa">编辑</font>
+                                                    </button>
+                                                    </a>
+                                                    <a href="{:U('/Index/KeyEvent/printKey',array('id'=>$vo['id']),'')}">
+                                                        <font color="#fffafa">
+                                                            <button class="btn btn-primary">打印
+                                                </font></button>
+                                                    </a>
+                                                </div>
+
+                                            </div>
+                                    </td>
+                                </tr>
+                            </foreach>
+                        </tbody>
+                    </table>
+
+                    </div>
+                </div>
+            </div>
+</block>

@@ -1,0 +1,171 @@
+{% extends "base.html" %} {% block title %} 查看U8编码 {% endblock%} {% block body %} {{ block.super }} {% load el_pagination_tags %}
+<style>
+    .wrap {
+        margin: 0px auto;
+    }
+</style>
+{% load staticfiles %}
+
+<!--<link href="/Public/css/jquery-ui-1.10.0.custom.css" rel="stylesheet" media="screen">-->
+<!--<script src="/Public/js/jquery-ui-1.9.2.custom.min.js"></script>-->
+
+<script src="{% static '/JS/jquery.ui.datepicker-zh-CN.js' %}"></script>
+
+<link rel="stylesheet" href="//apps.bdimg.com/libs/jqueryui/1.10.4/css/jquery-ui.min.css">
+
+<script src="//apps.bdimg.com/libs/jqueryui/1.10.4/jquery-ui.min.js"></script>
+
+
+<script>
+    $(function() {
+        //供应商名字标签,自动完成
+        obj = {{data | safe}};
+        //obj =[{'sid': 1, 'supplier_name': '\u65b0\u589e'}, {'sid': 0, 'supplier_name': 'None'}]
+        var nameTags = new Array();
+
+        for (var i = 0; i < obj.length; i++) {
+            t = obj[i].supplier_name
+            if (t) {
+                nameTags[i] = t;
+            }
+        }
+        
+        $("#supplier_name").autocomplete({
+            source: nameTags
+        });
+
+    });
+</script>
+<script>
+    $(function() {
+                    $("#record_date").datepicker();
+        $("#planed_date").datepicker();
+        var val = 'yy-mm-dd';
+        $("#record_date").datepicker("option", "dateFormat", val);
+        $("#planed_date").datepicker("option", "dateFormat", val);
+    });
+</script>
+
+<div class="container">
+    <div class="page-header">
+        <h2 align="center">
+            登记关键事件
+        </h2>
+    </div>
+
+    <div class=" panel panel-success" id="printArea">
+        <div class="panel-heading"><strong>新增信息</strong></div>
+        <br/>
+        <div class="container-fluid ">
+
+            <div class="row">
+                <form method='POST' action="/keyEvent/insertHandle/" class="">
+                    <input type="text" style="display:none;" name="id" value="">
+                    <div class="form-group col-xs-12">
+                        <label for="supplier_name" class="col-xs-2 control-label">供应商名称</label>
+                        <div class="col-xs-3 ui-widget">
+                            <input type="text" class="form-control " name="supplier_name" id="supplier_name" placeholder="" value="">
+                        </div>
+                        <label for="supplier_class" class="col-xs-2 control-label">供应商类别</label>
+                        <div class="col-xs-2 ">
+                            <select class="form-control" name="supplier_class" id="supplier_class">
+                                    <option></option>
+                                    <option   value="原材料">原材料</option>
+                                     <option                                   value="包装物">包装物</option>
+                                    <option                                    value="辅料">辅料</option>
+                                     <option   value="原材料">回收商</option>
+                                </select>
+
+                        </div>
+                        <label for="record_date" class="col-xs-1 control-label">登记日期</label>
+                        <div class="col-xs-2">
+                            <input type="text" class="form-control" name="record_date" id="record_date" placeholder="" value=" ">
+                        </div>
+
+
+                    </div>
+                    <div class="form-group col-xs-12">
+                        <label for="belong_to" class="col-xs-2 control-label">所属公司</label>
+                        <div class="col-xs-3 ">
+                            <select class="form-control" name="belong_to" id="belong_to">
+
+                                    <option></option>
+                                    <option                                   
+                                    value="广东美味鲜调味食品有限公司">广东美味鲜调味食品有限公司</option>
+                                    <option                                                                       value="广东厨邦食品有限公司">广东厨邦食品有限公司</option>
+
+                                </select>
+                        </div>
+                        <label for="order_id" class="col-xs-2 control-label">订单号</label>
+                        <div class="col-xs-2">
+                            <input type="text" class="form-control" name="order_id" id="order_id" placeholder="" value="">
+                        </div>
+                        <label for="planed_date" class="col-xs-1 control-label">计划日期</label>
+                        <div class="col-xs-2">
+                            <input type="text" class="form-control" name="planed_date" id="planed_date" placeholder="" value="">
+                        </div>
+                    </div>
+                    <div class="form-group col-xs-12">
+                        <label for="planed_quantity" class="col-xs-2 control-label">计划到货量</label>
+                        <div class="col-xs-3">
+                            <input type="text" class="form-control" name="planed_quantity" id="planed_quantity" placeholder="" value="">
+                        </div>
+                        <label for="material_name" class="col-xs-2 control-label">供应物资</label>
+                        <div class="col-xs-2">
+                            <input type="text" class="form-control" name="material_name" id="material_name" placeholder="" value="">
+                        </div>
+                    </div>
+
+                    <div class=" form-group col-xs-12">
+
+                        <label for="event_description" class="col-xs-2 control-label">事件描述</label>
+                        <div class="col-xs-10">
+                            <textarea type='text' class="form-control" name="event_description" id="event_description" rows="3"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="form-group col-xs-12">
+                        <label for="quality_deduction" class="col-xs-2 control-label">质量扣分</label>
+                        <div class="col-xs-3">
+                            <input type="text" class="form-control" name="quality_deduction" id="quality_deduction" placeholder="" value="">
+                        </div>
+                        <label for="supply_deduction" class="col-xs-2 control-label">供应扣分</label>
+                        <div class="col-xs-2">
+                            <input type="text" class="form-control" name="supply_deduction" id="supply_deduction" placeholder="" value="">
+                        </div>
+                        <label for="service_deduction" class="col-xs-1 control-label">服务扣分</label>
+                        <div class="col-xs-2">
+                            <input type="text" class="form-control" name="service_deduction" id="service_deduction" placeholder="" value="">
+                        </div>
+                    </div>
+                    <div class="form-group col-xs-12">
+                        <label for="warehouse_deduction" class="col-xs-2 control-label">仓存控制扣分</label>
+                        <div class="col-xs-3">
+                            <input type="text" class="form-control" name="warehouse_deduction" id="warehouse_deduction" placeholder="" value="">
+                        </div>
+                        <label for="special_bonus_point" class="col-xs-2 control-label">特别奖励得分</label>
+                        <div class="col-xs-2">
+                            <input type="text" class="form-control" name="special_bonus_point" id="special_bonus_point" placeholder="" value="">
+                        </div>
+                        <label for="special_penalty_point" class="col-xs-1 control-label">特别扣分</label>
+                        <div class="col-xs-2">
+                            <input type="text" class="form-control" name="special_penalty_point" id="special_penalty_point" placeholder="" value="">
+                        </div>
+                    </div>
+                    <div class="form-group col-xs-12">
+                        <label for="delay_batch" class="col-xs-2 control-label">延迟批次</label>
+                        <div class="col-xs-3">
+                            <input type="text" class="form-control" name="delay_batch" id="delay_batch" placeholder="" value="">
+                        </div>
+                        <div class="col-xs-6"></div>
+                        <div class="col-xs-1">
+                            <input type="submit" class="btn btn-info" name="submit" value="提交">
+                        </div>
+
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock body %}

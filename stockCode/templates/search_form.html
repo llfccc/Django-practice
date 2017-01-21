@@ -1,0 +1,14 @@
+<html>
+<head>
+    <title>Search</title>
+</head>
+<body>
+    <form action="/search/" method="get">
+        <input type="text" name="q">
+        <input type="submit" value="Search">
+    </form>
+    {%for k in result%}
+    {{k.material_name}}
+    {%endfor%}
+</body>
+</html>

@@ -1,0 +1,25 @@
+ {% extends "base.html" %} {% block body %} {{ block.super }} {% load bootstrap3 %}
+<div class="container">
+    {% if form.errors %}
+    <p style="color: red;">
+        Please correct the error{{ form.errors|pluralize }} below.
+    </p>
+    {% endif %} {% for item in error %}
+    <p style="color:red;">{{item}}</p>
+    {% endfor %}
+    <div class="container ">
+        <div class="col-lg-4 col-lg-offset-3 col-sm-6 col-sm-offset-3 col-xs-8 col-xs-offset-2" id="logindev">
+
+
+            <p>&nbsp;</p>
+            <form action="" class='well' method="post">
+              <h1>注册</h1>
+                <table>
+                    {% bootstrap_form form layout='inline'%}
+                </table>
+                {% bootstrap_button "注册" button_type="submit" button_class="btn-primary" %}
+
+            </form>
+        </div>
+    </div>
+    {% endblock body %}

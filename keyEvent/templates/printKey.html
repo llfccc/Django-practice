@@ -1,0 +1,146 @@
+{% extends "base.html" %} {% block title %} 查看关键事件 {% endblock%} {% block body %} {{ block.super }} {% load el_pagination_tags %}
+    {% load staticfiles %}
+    <script src="{% static 'js/jquery.jqprint-0.3.js' %}  "></script>
+    <script src="{% static 'js/jquery-migrate-1.1.0.js' %}  "></script>
+    
+    <script src="{% static 'Print.js/print.min.js' %}  "></script>
+    <link rel="stylesheet" type="text/css" href={% static 'Print.js/print.min.css' %}>
+
+    <script language="javascript">
+        function print() {
+            $("#printArea").jqprint();
+
+        }
+    </script>
+    <style>
+        /*.table th, .table td {*/
+        /*text-align: center;*/
+        /*height:38px;*/
+        /*border: 1px;*/
+        /*font-size:12px;*/
+        /*}*/
+        .table-bordered {
+
+            border: 2px;
+
+        }
+        .table{
+            font-size: 9px;
+        }
+        /*.table td{*/
+            /*Text-align:center;*/
+        /*}*/
+    </style>
+
+
+<block name="content">
+    <div class="container">
+        <div class="page-header">
+            <h2 align="center">打印关键事件</h2>
+        </div>
+
+        <br/>
+
+        <div class=" panel panel-success" id="printArea">
+
+            <br/>
+            <p style="text-align:center;font-weight:bold;font-size: 25px"><img src={% static 'img/keyIcon.jpg' %} >供应商关键事件记录表</p>
+
+            <div class="container-fluid ">
+                <div class="row">
+
+                    <div class="col-xs-12">
+                        <table class="table-personal table table-bordered  table-responsive    ">
+                            <tr>
+                                <th style="width:130px">记录id</th>
+                                <td style="Text-align:center;">{{data.id}}</td>
+                                <th>供应商名称</th>
+                                <td style="Text-align:center;">{{data.supplier_name}}</td>
+
+                            </tr>
+                            <tr>
+                                <th>供应物资</th>
+                                <td style="Text-align:center;">{{data.material_name}}</td>
+                                <th>所属公司</th>
+                                <td style="Text-align:center;">{{data.belong_to}}</td>
+                            </tr>
+                            <tr>
+                                <th>登记日期</th>
+                                <td style="Text-align:center;">{{data.record_date}}</td>
+                                <th>计划到货日期</th>
+                                <td style="Text-align:center;">{{data.planed_date}}</td>
+                            </tr>
+                            <tr>
+                                <th>计划到货量</th>
+                                <td style="Text-align:center;">{{data.planed_quantity}}</td>
+                                <th>订单号</th>
+                                <td style="Text-align:center;">{{data.order_id}}</td>
+                            </tr>
+                            <tr>
+                                <th style="height:100px;">问题描述</th>
+                                <td colspan="3">{{data.event_description}}</td>
+                            </tr>
+
+                            <tr>
+                                <th>延迟批次</th>
+                                <td style="Text-align:center;">{{data.delay_batch}}</td>
+                                <th>质量扣分</th>
+                                <td style="Text-align:center;">{{data.quality_deduction}}</td>
+                            </tr>
+                            <tr>
+                                <th>服务扣分</th>                                
+                   
+                                    <td style="Text-align:center;">{{data.service_deduction}}</td>           
+                                <th>供应扣分</th>
+                                <td style="Text-align:center;">{{data.supply_deduction}}</td>
+                            </tr>
+
+                            <tr>
+                                <th>仓存扣分</th>
+                                <td style="Text-align:center;">{{data.warehouse_deduction}}</td>
+                                <th>特别奖励分</th>
+                                <td style="Text-align:center;">{{data.special_bonus_point}}</td>
+                            </tr>
+                            <tr>
+                                <th>特别扣罚分</th>
+                                <td style="Text-align:center;">{{data.special_penalty_point}}</td>
+                                <th>记录人</th>
+                                <td style="Text-align:center;">{{data.recorder}}</td>
+                            </tr>
+                            <tr>
+                                <th style="height: 50px">确认人</th>
+                                <td></td>
+                                <th>供应商确认</th>
+                                <td></td>
+                            </tr>
+
+                        </table>
+
+                    </div>
+
+                    <!--<div class="col-xs-1">-->
+                    <!--</div>-->
+
+                    <!--<div class="col-xs-1">-->
+                    <!--</div>-->
+                </div>
+                <div class="row">
+                    <!--<div class="col-xs-1"></div>-->
+
+                    <div class="col-xs-6">
+                        <strong>Q/MWX F05001-2009 A/1</strong>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    </div>
+    <div class="container">
+        <button class="btn btn-info" onclick=" print()">打印</button>
+ <button type="button" onclick="printJS('printArea', 'html')">
+    Print Form
+ </button>
+    </div>
+
+{% endblock body %}}

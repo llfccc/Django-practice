@@ -1,0 +1,394 @@
+{% extends "base.html" %} {% block body %} {{ block.super }}
+
+{% load staticfiles %}
+<script src="{% static 'js/_updateSupplier.js' %}  "></script>
+
+<div class="container">
+        <div class="page-header">
+            <h2 align="center">搜索及查看供应商信息</h2>
+        </div>
+        <br/>
+
+        <div class=" panel panel-success">
+            <div class="panel-heading"><strong>供应商信息</strong></div>
+            <br/>
+            <div class="container-fluid ">
+                <div class="row">
+                    <form method='POST' class=" col-xs-5" action="">
+                        <div class="input-group btn-group">
+                            <div class="dropdown input-group-btn">
+                                <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1"
+                                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                    供应商类别
+                                    <span class="caret"></span>
+                                </button>
+                                <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                                    <!--<li><a href="#">Action</a></li>-->
+                                    <!--<li><a href="#">Another action</a></li>-->
+                                    <!--<li><a href="#">Something else here</a></li>-->
+                                    <!--<li><a href="#">Separated link</a></li>-->
+                                </ul>
+                            </div>
+                            <div class="input-group">
+                                <!--<span class="glyphicon glyphicon-search" aria-hidden="true"></span>-->
+                                <input name="searchText" class="form-control " type="text" placeholder="输入供应商名称或者物资">
+                                     <span class="input-group-btn ">
+                                  <input type="submit" class="button btn btn-success " value="搜索">
+                                  </span>
+                            </div>
+
+                        </div>
+                    </form>
+                    <div class="col-xs-1">
+                        <button class="btn btn-active" onclick="addNew('{% url 'supplierList:addNewSupplier' %}')">新增供应商
+                        </button>
+                    </div>
+                    <div class="col-xs-1 col-md-1">
+                        <button class="btn btn-info"
+                                onclick="updateContact('{:U('SupplierList/updateContact','','')}')">
+                            更新联系人
+                        </button>
+                    </div>
+                    <div class="col-xs-2 col-md-1">
+                        <button class="btn btn-warning  " onclick="updateAll('{% url 'supplierList:updateAll' %}')">
+                            更新数据
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <br/>
+
+            <div class="container-fluid ">
+                <div class="row">
+                    <div class="col-xs-4 col-md-4" style=" height:440px; overflow:scroll;">
+                        <table class="table  table-bordered table-responsive table-hover ">
+                            <tr>
+                                <th class="alert-info"> 供应商名称</th>
+                            </tr>
+                            {%for vo in data%}
+                                <tr onclick="updateInfo('{{vo.id}}','{% url 'supplierList:info' vo.id%}')">
+                                    <td>{{vo.supplier_name}}</td>
+                                </tr>
+                            {%endfor%}
+                        </table>
+
+                    </div>
+                    <div class="col-xs-6 col-md-6">
+                        <ul id="myTab" class="nav nav-tabs alert-info">
+                            <li class="active ">
+                                <a href="#home" data-toggle="tab">
+                                    供应商信息
+                                </a>
+                            </li>
+                            <li><a href="#review" data-toggle="tab">评审信息</a></li>
+                            <li><a href="#contact" data-toggle="tab">联系人信息</a></li>
+                            <li><a href="#certificate" data-toggle="tab">证件信息</a></li>
+                        </ul>
+                        <div id="myTabContent" class="tab-content">
+                            <div class="tab-pane fade in active" id="home">
+                                <form class="form-horizontal">
+                                    <div class="form-group">
+                                        <br/>
+                                        <div>
+                                            <input type="text" hidden="hidden" style="display:none" readonly="true"
+                                                   class="form-control" name="supplier_id"
+                                                   id="supplier_id" placeholder="">
+                                        </div>
+
+                                        <label for="supplier_name" class="col-sm-3 control-label">供应商名称</label>
+                                        <div class="col-sm-9">
+                                            <input type="text" class="form-control" name="supplier_name"
+                                                   id="supplier_name" placeholder="">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="material_name" class="col-sm-3 control-label">供应物资</label>
+                                        <div class="col-sm-9">
+                                            <input type="text" class="form-control" name="material_name"
+                                                   id="material_name" placeholder="">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="supplier_class" class="col-sm-3 control-label">供应商类别</label>
+                                        <div class="col-sm-9">
+                                            <input type="text" class="form-control" name="supplier_class"
+                                                   id="supplier_class" placeholder="">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="review_class" class="col-sm-3 control-label">评审类别</label>
+                                        <div class="col-sm-9">
+                                            <input type="text" class="form-control" name="review_class"
+                                                   id="review_class" placeholder="">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="review_result" class="col-sm-3 control-label">评审结果</label>
+                                        <div class="col-sm-9">
+                                            <input type="text" class="form-control" name="review_result"
+                                                   id="review_result" placeholder="">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="review_date" class="col-sm-3 control-label">评审日期</label>
+                                        <div class="col-sm-9">
+                                            <input type="text" class="form-control" name="review_date" id="review_date"
+                                                   placeholder="">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="whether_cooperation" class="col-sm-3 control-label">是否合作</label>
+                                        <div class="col-sm-9">
+                                            <input type="text" class="form-control" name="whether_cooperation"
+                                                   id="whether_cooperation" placeholder="">
+                                        </div>
+                                    </div>
+
+                                    <!--<input name="submit" value='update' type="submit" class="btn btn-default  ">-->
+
+                                </form>
+                            </div>
+
+                            <div class="tab-pane fade" id="review">
+                                <form class="form-horizontal">
+                                    <div class="form-group">
+                                        <br/>
+                                        <label for="material_name" class="col-sm-3 control-label">收到证件日期</label>
+                                        <div class="col-sm-9">
+                                            <input type="text" class="form-control" name="starting_date"
+                                                   id="starting_date" placeholder="">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="application_date" class="col-sm-3 control-label">申请单日期</label>
+                                        <div class="col-sm-9">
+                                            <input type="text" class="form-control" name="application_date"
+                                                   id="application_date" placeholder="">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="review_table_situation" class="col-sm-3 control-label">评审表情况</label>
+                                        <div class="col-sm-9">
+                                            <input type="text" class="form-control" name="review_table_situation"
+                                                      id="review_table_situation" placeholder=""></textarea>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="delay_reason" class="col-sm-3 control-label">延迟原因</label>
+                                        <div class="col-sm-9">
+                                            <input type="text" class="form-control" name="delay_reason"
+                                                   id="delay_reason" placeholder="">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="review_document_id" class="col-sm-3 control-label">评审文件位置</label>
+                                        <div class="col-sm-9">
+                                            <input type="text" class="form-control" name="review_document_id"
+                                                   id="review_document_id" placeholder="类似FSB2016-1">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="supplier_class" class="col-sm-3 control-label">评审备注</label>
+                                        <div class="col-sm-9">
+                                            <input type="text" class="form-control" name="review_remark"
+                                                   id="review_remark" placeholder="">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="supplier_class" class="col-sm-3 control-label">评审联系人</label>
+                                        <div class="col-sm-9">
+                                            <input type="text" class="form-control" name="company_contact"
+                                                   id="company_contact" placeholder="">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="supplier_class" class="col-sm-3 control-label">评审联系方式</label>
+                                        <div class="col-sm-9">
+                                            <input type="text" class="form-control" name="contact_information"
+                                                   id="contact_information" placeholder="">
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+
+                            <div class="tab-pane fade" id="contact">
+                                <form class="form-horizontal">
+                                    <br/>
+                                    <div class="form-group">
+                                        <label for="address" class="col-sm-2 control-label">地址</label>
+                                        <div class="col-sm-9">
+                                            <input type="text" class="form-control" name="address" id="address"
+                                                   placeholder="">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="telephone" class="col-sm-2 control-label">电话</label>
+                                        <div class="col-sm-9">
+                                            <input type="text" class="form-control" name="telephone" id="telephone"
+                                                   placeholder="">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="fax" class="col-sm-2 control-label">传真</label>
+                                        <div class="col-sm-9">
+                                            <input type="text" class="form-control" name="fax" id="fax"
+                                                   placeholder="">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="contact_1" class="col-sm-2 control-label">联系人1</label>
+                                        <div class="col-sm-3">
+                                            <input type="text" class="form-control" name="contact_1" id="contact_1"
+                                                   placeholder="">
+                                        </div>
+
+                                        <label for="contact_position_1" class="col-sm-2 control-label">职务1</label>
+                                        <div class="col-sm-4">
+                                            <input type="text" class="form-control" name="contact_position_1"
+                                                   id="contact_position_1" placeholder="">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="contact_telephone_1" class="col-sm-2 control-label">手机1</label>
+                                        <div class="col-sm-9">
+                                            <input type="text" class="form-control" name="contact_telephone_1"
+                                                   id="contact_telephone_1" placeholder="">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="supplier_class" class="col-sm-2 control-label">联系人2</label>
+                                        <div class="col-sm-3">
+                                            <input type="text" class="form-control" name="contact_2" id="contact_2"
+                                                   placeholder="">
+                                        </div>
+
+                                        <label for="supplier_class" class="col-sm-2 control-label">职务2</label>
+                                        <div class="col-sm-4">
+                                            <input type="text" class="form-control" name="contact_position_2"
+                                                   id="contact_position_2" placeholder="">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="supplier_class" class="col-sm-2 control-label">手机2</label>
+                                        <div class="col-sm-9">
+                                            <input type="text" class="form-control" name="contact_telephone_2"
+                                                   id="contact_telephone_2" placeholder="">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="supplier_class" class="col-sm-2 control-label">联系人3</label>
+                                        <div class="col-sm-3">
+                                            <input type="text" class="form-control" name="contact_3" id="contact_3"
+                                                   placeholder="">
+                                        </div>
+                                        <label for="supplier_class" class="col-sm-2 control-label">职务3</label>
+                                        <div class="col-sm-4">
+                                            <input type="text" class="form-control" name="contact_position_3"
+                                                   id="contact_position_3" placeholder="">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="supplier_class" class="col-sm-2 control-label">手机3</label>
+                                        <div class="col-sm-9">
+                                            <input type="text" class="form-control" name="contact_telephone_3"
+                                                   id="contact_telephone_3" placeholder="">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="supplier_class" class="col-sm-2 control-label">QQ</label>
+                                        <div class="col-sm-9">
+                                            <input type="text" class="form-control" name="qq" id="qq"
+                                                   placeholder="">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="supplier_class" class="col-sm-2 control-label">联系备注</label>
+                                        <div class="col-sm-9">
+                                            <input type="text" class="form-control" name="contact_remark"
+                                                   id="contact_remark" placeholder="">
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+
+
+                            <div class="tab-pane fade" id="certificate">
+                                <form class="form-horizontal">
+                                    <br/>
+                                    <div class="form-group">
+                                        <label for="supplier_class" class="col-sm-3 control-label">存档编号</label>
+                                        <div class="col-sm-3">
+                                            <input type="text" class="form-control" name="archive_class"
+                                                   id="archive_class" placeholder="">
+                                        </div>
+                                        <div class="col-sm-1">
+                                            -
+                                        </div>
+                                        <div class="col-sm-2">
+                                            <input type="text" class="form-control" name="archive_id"
+                                                   id="archive_id"
+                                                   placeholder="">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="supplier_class" class="col-sm-3 control-label">法人</label>
+                                        <div class="col-sm-9">
+                                            <input type="text" class="form-control" name="artificial_person"
+                                                   id="artificial_person" placeholder="">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="supplier_class" class="col-sm-3 control-label">营业执照编号</label>
+                                        <div class="col-sm-9">
+                                            <input type="text" class="form-control" name="business_license_id"
+                                                   id="business_license_id" placeholder="">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="supplier_class" class="col-sm-3 control-label">营业执照有效期</label>
+                                        <div class="col-sm-9">
+                                            <input type="text" class="form-control" name="business_license_period"
+                                                   id="business_license_period" placeholder="">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="annual" class="col-sm-3 control-label">最新年报情况</label>
+                                        <div class="col-sm-9">
+                                            <input type="text" class="form-control" name="annual"
+                                                   id="annual" placeholder="">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="supplier_class" class="col-sm-3 control-label">验证结果</label>
+                                        <div class="col-sm-9">
+                                            <input type="text" class="form-control"
+                                                   name="business_license_confirmation"
+                                                   id="business_license_confirmation" placeholder="">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="supplier_class" class="col-sm-3 control-label">注册资金</label>
+                                        <div class="col-sm-9">
+                                            <input type="text" class="form-control" name="registered_capital"
+                                                   id="registered_capital" placeholder="">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="certificate_remark" class="col-sm-3 control-label">证件备注</label>
+                                        <div class="col-sm-9">
+                                            <input type="text" class="form-control" name="certificate_remark"
+                                                   id="certificate_remark" placeholder="">
+                                        </div>
+                                    </div>
+                                </form>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+{% endblock body %}

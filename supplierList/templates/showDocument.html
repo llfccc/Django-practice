@@ -1,0 +1,143 @@
+{% extends "base.html" %} {% block body %} {{ block.super }}
+
+{% load staticfiles %}
+<script src="{% static 'js/_updateSupplier.js' %}  "></script>
+
+<script src="/Public/js/jquery.ui.datepicker-zh-CN.js"></script>
+
+   <link rel="stylesheet" href="//apps.bdimg.com/libs/jqueryui/1.10.4/css/jquery-ui.min.css">
+
+   <script src="//apps.bdimg.com/libs/jqueryui/1.10.4/jquery-ui.min.js"></script>
+   <!--日期选择器-->
+   <script>
+       $(function () {
+           $("#start_date").datepicker();
+           $("#end_date").datepicker();
+           var val = 'yy-mm-dd';
+           $("#start_date").datepicker("option", "dateFormat", val);
+           $("#end_date").datepicker("option", "dateFormat", val);
+       });
+   </script>
+
+
+   <script>
+       var $table = $('#table');
+       $(function () {
+           $('#toolbar').find('select').change(function () {
+               $table.bootstrapTable('refreshOptions', {
+                   exportDataType: $(this).val()
+               });
+           });
+       })
+   </script>
+   <script>
+       function detailFormatter(index, row) {
+           var html = [];
+           $.each(row, function (key, value) {
+               if (key.substring(0, 1) != "_") {
+                   html.push('<p><b>' + key + ':</b> ' + value + '</p>');
+               }
+           });
+           return html.join('');
+       }
+   </script>
+
+</block>
+
+<block name="content">
+   <div class="container">
+       <div class="page-header">
+           <h2 align="center">查询证件情况</h2>
+       </div>
+       <br/>
+
+       <div class="col-xs-12">
+           <div class="row ">
+               <form method="post" action="">
+
+
+                   <div class="form-group col-xs-12">
+                       <div class="col-lg-4"></div>
+                       <div class="form-group">
+
+
+                           <label for="supplier_class" class="col-xs-1 control-label">存档类别 </label>
+                           <div class="col-xs-3">
+                               <select class="form-control " name="archive_class" id="archive_class">
+
+                                   <option value="原材料">原材料</option>
+                                   <option value="包装物">包装物</option>
+                                   <option value="辅料">辅料</option>
+                                   <option value="五金、外卖">五金、外卖</option>
+                               </select>
+                           </div>
+
+                           <input class="btn btn-info" value=" 筛选 " type="submit">
+                       </div>
+                   </div>
+
+               </form>
+
+           </div>
+       </div>
+   </div>
+   <div class="container">
+       <div class=" panel panel-success">
+           <div id="toolbar">
+               <select class="form-control">
+                   <option value="">默认导出</option>
+                   <option value="all">导出所有</option>
+                   <option value="selected">导出勾选的项</option>
+               </select>
+           </div>
+
+
+           <table id="table"
+                  data-toggle="table"
+                  data-toolbar="#toolbar"
+                  data-show-export="true"
+                  data-search="true"
+                  data-filter-control="true"
+                  data-show-columns="true"
+                  data-show-multi-sort="true"
+                  data-sort-priority='[{"sortName": "github.count.forks","sortOrder":"desc"},{"sortName":"github.count.stargazers","sortOrder":"desc"}]'
+
+                  data-show-pagination-switch="true"
+                  data-pagination="true"
+                  data-page-size="10"
+                  data-page-list="[20, 50,999]"
+                  data-detail-view="true"
+                  data-detail-formatter="detailFormatter"
+           >
+
+               <thead>
+               <tr>
+                   <th data-field="state" data-checkbox="true"></th>
+
+                   <th data-field="供应商类别" data-sortable="true" data-filter-control="select">供应商类别</th>
+                   <th data-field="存档编号" data-sortable="true" data-filter-control="input">存档编号</th>
+                   <th data-field="供应商名称" data-sortable="true" data-filter-control="input">供应商名称</th>
+                   <th data-field="营业执照有效期至" data-sortable="true" data-filter-control="input">营业执照有效期至</th>
+                   <th data-field="营业执照验证结果" data-sortable="true" data-filter-control="input">营业执照验证结果</th>
+                   <th data-field="年报情况" data-sortable="true" data-filter-control="input">年报情况</th>
+                   <th data-field="备注" data-sortable="true" data-filter-control="input">备注</th>
+
+
+               </tr>
+               </thead>
+          {%for vo in data%}
+                   <tr>
+                       <td></td>
+                       <td>{{vo.archive_class}}</td>
+                       <td>{{vo.archive_id}}</td>
+                       <td>{{vo.supplier_name}}</td>
+                       <td>{{vo.business_license_period}}</td>
+                       <td>{{vo.business_license_confirmation}}</td>
+                       <td>{{vo.annual}}</td>
+                       <td>{{vo.certificate_remark}}</td>
+                   </tr>
+    {%endfor%}
+           </table>
+       </div>
+   </div>
+{% endblock body %}

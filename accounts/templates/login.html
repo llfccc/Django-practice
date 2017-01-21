@@ -1,0 +1,40 @@
+ {% extends "base.html" %} {% block body %} {{ block.super }}
+ {% load bootstrap3 %}
+
+ {% if password_is_wrong %}
+ <div class="alert alert-error">
+     <button type="button" class="close" data-dismiss="alert">×</button>
+     <h4>错误!</h4>用户名或密码错误
+ </div>
+ {% endif %}
+
+
+ <div class="container ">
+      <div class="col-lg-4 col-lg-offset-3 col-sm-6 col-sm-offset-3 col-xs-8 col-xs-offset-2" id="logindev">
+
+        <form class="form-horizontal well" action="" method="post">
+                          {% csrf_token %}
+        <h1>登录</h1>
+        用户名一般为工号，如果密码忘记无法找回，但可找管理员修改
+        {% bootstrap_form form layout='inline'%}
+        <p class="form-actions">
+            <input type="submit" value="登录" class="btn btn-primary">
+            <a href="/contactme/">
+                <input type="button" value="忘记密码" class="btn btn-danger">
+            </a>
+
+        </p>
+      </form>
+  </div>
+
+
+
+
+
+
+
+
+
+
+
+{% endblock body %}

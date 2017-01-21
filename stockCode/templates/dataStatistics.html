@@ -1,0 +1,20 @@
+{% extends "base.html" %} {% block title %} 数据统计 {% endblock%} {% block head %} {{ block.super }} {% endblock%} {% block body %} {{ block.super }} {% load staticfiles %}
+<script src="{% static 'js/echarts/echarts.min.js' %}  "></script>
+<script src="{% static 'js/echarts/theme/dark.js' %}  "></script>
+<!-- 为ECharts准备一个具备大小（宽高）的Dom -->
+<div class='container'>
+    <h1>数据统计</h1>
+    <div id="main" style="width: 600px;height:400px;"></div>
+
+    <script type="text/javascript">
+        // 基于准备好的dom，初始化echarts实例
+        var myChart = echarts.init(document.getElementById('main'), 'dark');
+
+        // 指定图表的配置项和数据
+        var option = {{chart | safe}};
+
+        // 使用刚指定的配置项和数据显示图表。
+        myChart.setOption(option);
+    </script>
+</div>
+{% endblock%}

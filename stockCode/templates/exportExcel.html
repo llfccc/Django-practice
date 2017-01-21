@@ -1,0 +1,76 @@
+{% extends "base.html" %} {% block title %} 添加u8编码 {% endblock%} {% block head %} {{ block.super }} {% load staticfiles %}
+<script src="{% static 'js/_data.js' %}  "></script>
+{% endblock%} {% block body %} {{ block.super }} {% load el_pagination_tags %}
+<style>
+    .wrap {
+        margin: 0px auto;
+    }
+</style>
+<div class="container wrap" style='{margin:0 auto} '>
+    <h1>添加u8编码</h1>
+    导出编码
+    <h3>现在还有{{number}}个</h3>
+
+    <table class="table table-striped table-bordered table-hover">
+        <thead>
+            <tr class='success'>
+                <td>ID</td>
+                <td>U8编号</td>
+                <td>推荐编号</td>
+                <td>物资类别</td>
+                <td>物资名称</td>
+                <td>规格型号</td>
+                <td>账套</td>
+                <td>品牌</td>
+                <td>计量单位</td>
+                <td>备注</td>
+                <td>需求部门</td>
+                <td>设备名称</td>
+                <td>厂家</td>
+                <td>设备型号</td>
+                <td>申请人</td>
+                <td>审核时间</td>
+            </tr>
+        </thead>
+        {%if b%} {%for k in b%}
+        <tr>
+            <td>{{k.id}}</td>
+            <td><input class="form-control" style="width:110px" type="text" name="code" id="code{{k.id}}" /></td>
+            <td>{{k.recommend}}</td>
+            <td>{{k.material_category}}</td>
+            <td>{{k.material_name}}</td>
+            <td>{{k.model}}</td>
+            <td>{{k.accounts_set}}</td>
+            <td>{{k.brand}}</td>
+            <td>{{k.unit}}</td>
+            <td>{{k.remark}}</td>
+            <td>{{k.demand_department}}</td>
+            <td>{{k.equipment_name}}</td>
+            <td>{{k.manufacturers}}</td>
+            <td>{{k.equipment_model}}</td>
+            <td>{{k.applicant}}</td>
+            <td>{{k.varified_time|date:"Y-m-d"}}</td>
+        </tr>
+        {%endfor%}
+    </table>
+    <div class="col-md-4">
+
+        {%endif%}
+    </div>
+    <div class="col-md-2">
+        <botton class="btn btn-success btn-lg" onclick="editCode()"><span class="label label-success m-l-xs">提交</span></botton>
+    </div>
+</div>
+存货对照表仓位：</br>
+QUL 五金仓；QU 四分厂五金仓；P 包装物仓
+A 原材料  X 宣传品   W 原材料   F 办公用品
+R燃料
+W 外购半成品
+z食材
+
+</br>
+A:内销、采购、进口、生产耗用(10%)  R:采购、进口、生产耗用 W:采购、进口、生产耗用(10%)</br>
+G:采购、进口、生产耗用 P:内销、采购、进口、生产耗用(10%)F:采购、生产耗用 </br>
+L:采购、进口、在制、生产耗用 U:采购、进口、生产耗用 X:内销、采购、进口、生产耗用(5%) </br>
+Z:采购、进口、生产耗用 Q:采购、进口、生产耗用
+{% endblock body %}

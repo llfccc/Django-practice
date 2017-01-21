@@ -1,0 +1,91 @@
+{% block doc %}
+<!DOCTYPE html>
+<html{% block html_attribs %}{% endblock html_attribs %}>
+    {% block html %}
+
+    <head>
+        {% block head %} {% load staticfiles %}
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="renderer"  content="webkit" />  
+        <meta name="viewport" content="width=device-width, initial-scale=1.0,user-scalable=no">
+        <!-- <[if lt IE 9]>
+        <script src="{% static 'js/html5shiv.min.js' %}  "></script>
+        <script src="{% static 'js/respond.min.js' %}  "></script>
+        <![endif]> -->
+        <script src="{% static 'js/jquery-1.12.4.min.js' %}  "></script>
+        <script src="{% static 'js/notify.js' %}  "></script>
+        <title>{% block title %}{% endblock title %}</title>
+
+        {% block metas %}
+         {% endblock metas %} {% block styles %}
+        <!-- Bootstrap -->
+        <link rel="stylesheet" href="{% static 'CSS/bootstrap.min.css'%}">
+        <link rel="stylesheet" href="{% static 'CSS/bootstrap-table.min.css' %}">
+        <!-- <link rel="stylesheet" href="{% static '/CSS/nav_style.css' %}" />  -->
+        {% endblock styles %} {% endblock head %}
+    </head>
+    <body{% block body_attribs %}{% endblock body_attribs %}>
+        {% block body %} {% block navbar %} {% include 'nav.html' %}{% endblock navbar %} {% block content %} {% endblock content %} {% block scripts %}
+
+        <script src="{% static '/JS/bootstrap.min.js' %}"></script>
+        <script src="{% static 'js/bootstrap-table.min.js' %}  "></script>
+        <script src="{% static '/JS/bootstrap-table-export.min.js' %}"></script>
+        <script src="{% static '/JS/tableExport.js' %}"></script>
+        {% endblock scripts %} {#以下为消息提示部分#}
+        <div class="container">
+            {% if messages %} {% for message in messages %}
+            <ul class="messagelist">
+                <div class="alert alert-warning">
+                    <button type="button" class="close" data-dismiss="alert">&times;</button> {{ message|capfirst }}
+                </div>
+            </ul>
+            {% endfor %} {% endif %}
+        </div>
+
+        {% endblock body %}
+        <script type="text/javascript">
+            if (window.Notification && window.Notification.permission === "default") {
+                //未开启桌面提醒，进行相关操作、或提示开启
+            }
+
+            function showUnreadNews() {
+                Notification.requestPermission()
+                $(document).ready(function() {
+
+                        var host="http://"+window.location.host
+
+                        $.ajax({
+                                type: "GET",
+                                url: host+"/fetchNotification",
+                                dataType: "json",
+                                success: function(msg) {
+                                    for (var i = 0; i < msg.length; i++) {
+
+                                        if (!("Notification" in window)) {
+                                            alert("This browser does not support desktop notification");
+                                            return;
+                                        };
+                                        console.log(msg[i].fields.verb);
+                                        var t = new Date().toLocaleString();
+                                        var option = {
+                                            body: msg[i].fields.verb ,
+                                            icon: '{% static '/img/warning.jpg' %}',
+                                            tag: ++i,
+                                        };
+                                        var notification = new Notification('编码系统:'+ t, option);
+                                        $.get(host+"/inbox/notifications/mark-all-as-read/");
+                                    }},
+                                    error: function(e) {
+                                        console.log(e);
+                                    }
+                                });
+                        });
+                }
+                setInterval('showUnreadNews()', 5000);
+        </script>
+
+        </body>
+        {% endblock html %}
+
+        </html>
+        {% endblock doc %}

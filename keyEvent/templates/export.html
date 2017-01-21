@@ -1,0 +1,155 @@
+<extend name="./App/Modules/Index/Tpl/Public/base" />
+<block name="title"><title>关键事件登记</title></block>
+<block name="js">
+    <script src="static/js/bootstrap-table-filter-control.js"></script>
+    <link rel="stylesheet" href="__PUBLIC__/css/bootstrap-table.css">
+    <script src="__PUBLIC__/js/bootstrap-table.js"></script>
+    <script src="__PUBLIC__/js/bootstrap-table-export.js"></script>
+    <script src="__PUBLIC__/js/tableExport.js"></script>
+
+    <!--<link href="/Public/css/jquery-ui-1.10.0.custom.css" rel="stylesheet" media="screen">-->
+    <!--<script src="/Public/js/jquery-ui-1.9.2.custom.min.js"></script>-->
+    <script src="/Public/js/jquery.ui.datepicker-zh-CN.js"></script>
+
+    <link rel="stylesheet" href="//apps.bdimg.com/libs/jqueryui/1.10.4/css/jquery-ui.min.css">
+
+    <script src="//apps.bdimg.com/libs/jqueryui/1.10.4/jquery-ui.min.js"></script>
+    <!--日期选择器-->
+    <script>
+        $(function () {
+            $("#start_date").datepicker();
+            $("#end_date").datepicker();
+            var val = 'yy-mm-dd';
+            $("#start_date").datepicker("option", "dateFormat", val);
+            $("#end_date").datepicker("option", "dateFormat", val);
+        });
+    </script>
+    <!--<script src="{{ url_for('static',filename='tableExport.js')}}"></script>-->
+
+    <script>
+        var $table = $('#table');
+        $(function () {
+            $('#toolbar').find('select').change(function () {
+                $table.bootstrapTable('refreshOptions', {
+                    exportDataType: $(this).val()
+                });
+            });
+        })
+    </script>
+    <script>
+        function detailFormatter(index, row) {
+            var html = [];
+            $.each(row, function (key, value) {
+                if (key.substring(0, 1) != "_") {
+                    html.push('<p><b>' + key + ':</b> ' + value + '</p>');
+                }
+            });
+            return html.join('');
+        }
+    </script>
+
+</block>
+
+<block name="content">
+    <div class="container">
+        <div class="page-header">
+            <h2 align="center">导出关键事件</h2>
+        </div>
+        <br/>
+
+        <div class="col-xs-12">
+            <div class="row ">
+                <form method="post" action="{:U('/KeyEvent/export','','')}">
+
+
+                    <div class="form-group col-xs-12">
+                        <label for="supplier_class" class="col-xs-1 control-label">物资类别 </label>
+                        <div class="col-xs-2">
+                            <select class="form-control " name="supplier_class" id="supplier_class">
+                                <option></option>
+                                <option value="原材料">原材料</option>
+                                <option value="包装物">包装物</option>
+                                <option value="辅料">辅料</option>
+                            </select>
+                        </div>
+                        <label for="start_date" class="col-xs-1 control-label">日期范围</label>
+                        <div class="col-xs-2">
+                            <input type="text" class="form-control" name="start_date"
+                                   id="start_date" placeholder="起始日期">
+
+                        </div>
+                        <!--<div class="col-xs-1">-->
+                            <!-- - -->
+                        <!--</div>-->
+                        <div class="col-xs-2">
+                            <input type="text" class="form-control" name="end_date"
+                                   id="end_date" placeholder="结束日期">
+                        </div>
+                        <input class="btn btn-default" value=" 筛选 " type="submit">
+                    </div>
+
+                </form>
+
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <div class=" panel panel-success">
+            <div id="toolbar">
+                <select class="form-control">
+                    <option value="">默认导出</option>
+                    <option value="all">导出所有</option>
+                    <option value="selected">导出勾选的项</option>
+                </select>
+            </div>
+
+
+            <table id="table"
+                   data-toggle="table"
+                   data-toolbar="#toolbar"
+                   data-show-export="true"
+                   data-search="true"
+                   data-filter-control="true"
+                   data-show-columns="true"
+                   data-show-multi-sort="true"
+                   data-sort-priority='[{"sortName": "github.count.forks","sortOrder":"desc"},{"sortName":"github.count.stargazers","sortOrder":"desc"}]'
+
+                   data-show-pagination-switch="true"
+                   data-pagination="true"
+                   data-page-size="10"
+                   data-page-list="[20, 50,999]"
+                   data-detail-view="true"
+                   data-detail-formatter="detailFormatter"
+            >
+
+                <thead>
+                <tr>
+                    <th data-field="state" data-checkbox="true"></th>
+                    <th data-field="供应商名称" data-sortable="true" data-filter-control="input">供应商名称</th>
+                    <th data-field="供应商类别" data-sortable="true" data-filter-control="select">供应商类别</th>
+                    <th data-field="登记日期" data-sortable="true" data-filter-control="input">登记日期</th>
+                    <th data-field="所属公司" data-sortable="true" data-filter-control="input">所属公司</th>
+                    <th data-field="供应物资" data-sortable="true" data-filter-control="input">供应物资</th>
+                    <th data-field="事件描述" data-sortable="true" data-filter-control="input">事件描述</th>
+                    <th data-field="物资名称" data-sortable="true" data-filter-control="input">记录人</th>
+
+                </tr>
+                </thead>
+                <foreach name="data" item="vo">
+                    <tr>
+                        <td></td>
+                        <td>{$vo.supplier_name}</td>
+                        <td>{$vo.supplier_class}</td>
+                        <td>{$vo.record_date}</td>
+                        <td>{$vo.belong_to}</td>
+                        <td>{$vo.material_name}</td>
+                        <td>{$vo.event_description}</td>
+                        <td>{$vo.recorder}</td>
+                    </tr>
+                </foreach>
+            </table>
+        </div>
+    </div>
+</block>
+
+</block>

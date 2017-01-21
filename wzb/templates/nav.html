@@ -1,0 +1,109 @@
+<div class='container'>
+        <div class="navbar navbar-default navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">        
+           <a href='/' class="navbar-brand"><span class="glyphicon glyphicon-home" aria-hidden="true"></span></a>
+          <button class="navbar-toggle" type="button" data-toggle="collapse" data-target="#navbar-main">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+        </div>
+        <div class="navbar-collapse collapse" id="navbar-main">
+          <ul class="nav navbar-nav">
+            
+            <li><a href="/stockCode/upload_file">批增编码</a></li>
+             <li><a href="/stockCode/insertApplicant">单增编码</a></li>
+                         <li><a href="">/</a></li>
+
+            <li><a href="/stockCode/showUnCode">查未完成</a></li>
+            <li><a href="/stockCode/showAlreadyCode">查已完成</a></li>
+            <li><a href="/stockCode/showAllAddCode">所有编码</a></li>
+            <li><a href="">/</a></li>
+
+            <li><a href="/stockCode/varifyCode">审核编码</a></li>
+
+            <li><a href="/stockCode/editCode">增加编码</a></li>
+            <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                    <li>供应商管理<span class="caret"></span></a>
+                <ul class="dropdown-menu">
+                    <li>
+                        <a href="#"></a>
+                        <li><a href="/supplierList/querySupplier">查看供应商</a></li>
+                        <li><a href="/supplierList/showDocument">查看供应商档案</a></li>
+                        <li><a href="/supplierList/dataStatistics">数据统计</a></li>
+                        <li class="divider"></li>
+                        <li><a href="/supplierList/queryOptionalSupplier">查看备选供应商</a></li>
+                    </li>
+                </ul>
+                </li>
+             <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            <li>关键事项<span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a href="#"></a>
+                                <li><a href="/keyEvent/showAllKeyEvents">查看关键事项(忽略）</a></li>
+                                <li><a href="/keyEvent/insert">新增关键事项(忽略）</a></li>
+                            </li>
+                        </ul>
+             </li>
+          </ul>
+
+
+       
+                                <!--<li><a href="/keyEvent/showAllKeyEvents">查看关键事项(忽略）</a></li>
+                                <li><a href="/keyEvent/showAllKeyEvents">查看关键事项(忽略）</a></li>-->
+                                <!--<li><a href="/supplierList/showDocument">查看供应商档案</a></li>
+                                    <li><a href="/supplierList/dataStatistics">数据统计</a></li>
+                        <li class="divider"></li>
+                        <li><a href="/supplierList/queryOptionalSupplier">查看备选供应商</a></li>
+                            </li>
+                        </ul>
+                        </li>-->
+
+        </ul>
+          <ul class="nav navbar-nav navbar-right">
+      
+     
+            <li class="dropdown">
+              <a class="dropdown-toggle" data-toggle="dropdown" href="#" id="themes">用户管理 <span class="caret"></span></a>
+              <ul class="dropdown-menu" aria-labelledby="themes">    
+    <li>                            <a href="#"></a>                        </li>
+                        <li>
+                            <font color=red size=3>
+                                {%if request.user%} {{ request.user.profile.chinese_name }} {%endif%}
+                            </font>
+                        </li>
+                        <li><a href="/accounts/login/">登录</a></li>
+                        <li><a href="/accounts/logout/">登出</a></li>
+
+                        <li><a href="/accounts/register">注册</a></li>
+                        <li><a href="/accounts/changepwd">修改密码</a></li>
+                        <li class="divider"></li>
+                        <li><a href="/admin">后台管理</a></li>
+
+              </ul>
+            </li>
+          </ul>
+
+               
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <nav class="navbar navbar-default" role="navigation">
+
+        <ul class="nav navbar-nav">
+         
+
+
+
+            <li><a href="">/</a></li>
+
+          
+    </nav>
+
+</div>

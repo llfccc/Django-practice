@@ -119,6 +119,7 @@
                    <th data-field="供应商名称" data-sortable="true" data-filter-control="input">供应商名称</th>
                    <th data-field="营业执照有效期至" data-sortable="true" data-filter-control="input">营业执照有效期至</th>
                    <th data-field="营业执照验证结果" data-sortable="true" data-filter-control="input">营业执照验证结果</th>
+                   <th data-field="注册资金" data-sortable="true" data-filter-control="input">注册资金</th>
                    <th data-field="年报情况" data-sortable="true" data-filter-control="input">年报情况</th>
                    <th data-field="备注" data-sortable="true" data-filter-control="input">备注</th>
 
@@ -133,7 +134,8 @@
                        <td>{{vo.supplier_name}}</td>
                        <td>{{vo.business_license_period}}</td>
                        <td>{{vo.business_license_confirmation}}</td>
-                       <td>{{vo.annual}}</td>
+                       <td>{{vo.registered_capital}}</td>
+                       <td>{{vo.annual}}</td>                       
                        <td>{{vo.certificate_remark}}</td>
                    </tr>
     {%endfor%}

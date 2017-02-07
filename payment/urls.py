@@ -4,7 +4,7 @@ from . import views
 
 urlpatterns = [
 
-    url(r'^download/$', views.download, name='download'),
+    url(r'^showAllPayment/$', views.showAllPayment, name='showAllPayment'),
 
     # url(r'^insert/$', views.insert, name='insert'),
     # url(r'^edit/(\d+)$', views.edit, name='edit'),

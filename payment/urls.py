@@ -6,9 +6,9 @@ urlpatterns = [
 
     url(r'^showAllPayment/$', views.showAllPayment, name='showAllPayment'),
 
-    # url(r'^insert/$', views.insert, name='insert'),
+    url(r'^upload_file/$', views.upload_file, name='upload_file'),
     # url(r'^edit/(\d+)$', views.edit, name='edit'),
-    url(r'^printPayment/(\d+)$', views.printPayment, name='printPayment'),
+    #url(r'^printPayment/(\d+)$', views.printPayment, name='printPayment'),
 
-    # url(r'^insertHandle/$', views.insertHandle, name='insertHandle'),
+    #url(r'^generated_doc/$', views.generated_doc, name='generated_doc'),
 ]

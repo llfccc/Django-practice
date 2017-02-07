@@ -10,7 +10,7 @@ from __future__ import unicode_literals
 from django.db import models
 
 
-class RegistrationForm(models.Model):
+class RegistrationTable(models.Model):
     id = models.IntegerField(primary_key=True)
     max_num = models.FloatField(blank=True, null=True)  # Field renamed to remove unsuitable characters. Field renamed because it started with '_'. Field renamed because it ended with '_'.
     company_name = models.CharField(max_length=255, blank=True, null=True)  # Field renamed to remove unsuitable characters. Field renamed because it started with '_'. Field renamed because it ended with '_'. Field renamed because of name conflict.

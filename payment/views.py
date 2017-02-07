@@ -3,27 +3,59 @@ from django.shortcuts import render
 
 from django.http import HttpResponseRedirect, HttpResponse, Http404
 from django.shortcuts import render_to_response, render
-import sys,json
+import os,sys,json,time
 # sys.path.append("..")
 # from supplierList.models import SupplierList
-from .models import RegistrationForm
+from .models import RegistrationTable
 from django.db.models import Count, Avg
 from django.contrib.auth.decorators import login_required, permission_required
 #生成pdf
 
 from django.http import HttpResponse
-
+from docx_tpl import handle_uploaded_excel,generated_doc
+from .forms import UploadFileForm
 
 @login_required
-def printPayment(request,id):
-    
-    # data=KeyEvent.objects.filter(id=id)[0]
-    # print(data.supplier_class)
-    return render(request, 'printPayment.html', locals())
+def upload_file(request):
+    if request.user.has_perm('stockCode.add_codetable'):
+        if request.method == 'POST':
+
+            form_content =UploadFileForm(request.POST, request.FILES)
+            if form_content.is_valid():
+                myFile = form_content.cleaned_data['file']
+                # 保存上传的文件为指定的文件名
+
+                def writeExcel():
+                    with open(os.path.join("F:\\django_wzb\\wzb\\upload", 'target2.xlsx'), 'wb+') as f:
+                        for chunk in myFile.chunks():      # 分块写入文件
+                            f.write(chunk)
+                try:
+                    writeExcel()
+                except:
+                    time.sleep(4)
+                    writeExcel()
+
+                insert_result = handle_uploaded_excel()                
+                response = HttpResponseRedirect('/payment/showAllPayment/')
+                # print(insert_result)
+                return response
+
+        else:
+            form = UploadFileForm()
+
+            response=render(request, 'upload.html', locals())
+            return response
+
+    else:
+        messages.success(request, '你没有权限访问这个页面')
+        return render(request, 'noPremission.html')
+
+
 
 @login_required
 def showAllPayment(request):
-    b=RegistrationForm.objects.order_by('id')[:10]
+    generated_doc()
+    b=RegistrationTable.objects.order_by('id')[:10]
 
     return render(request, 'showAllPayment.html', locals())
 

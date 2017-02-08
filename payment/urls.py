@@ -10,5 +10,5 @@ urlpatterns = [
     # url(r'^edit/(\d+)$', views.edit, name='edit'),
     #url(r'^printPayment/(\d+)$', views.printPayment, name='printPayment'),
 
-    #url(r'^generated_doc/$', views.generated_doc, name='generated_doc'),
+    url(r'^download/$', views.download, name='download'),
 ]

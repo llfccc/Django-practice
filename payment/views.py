@@ -6,23 +6,25 @@ from django.shortcuts import render_to_response, render
 import os,sys,json,time
 # sys.path.append("..")
 # from supplierList.models import SupplierList
-from .models import RegistrationTable
+from .models import RegistrationTable,SupplierPayment
 from django.db.models import Count, Avg
 from django.contrib.auth.decorators import login_required, permission_required
 #生成pdf
-
+from django.forms.models import model_to_dict
 from django.http import HttpResponse
 from docx_tpl import handle_uploaded_excel,generated_doc
 from .forms import UploadFileForm
+import zipfile
+from django.http import HttpResponseRedirect ,StreamingHttpResponse
 
 @login_required
 def upload_file(request):
     if request.user.has_perm('stockCode.add_codetable'):
         if request.method == 'POST':
-
             form_content =UploadFileForm(request.POST, request.FILES)
             if form_content.is_valid():
                 myFile = form_content.cleaned_data['file']
+                company_name = form_content.cleaned_data['company_name']
                 # 保存上传的文件为指定的文件名
 
                 def writeExcel():
@@ -35,9 +37,13 @@ def upload_file(request):
                     time.sleep(4)
                     writeExcel()
 
-                insert_result = handle_uploaded_excel()                
+                SupplierPaymentCode=SupplierPayment.objects.all()
+                SupplierPaymentDict=[]
+                for k in SupplierPaymentCode:
+                    SupplierPaymentDict.append(model_to_dict(k))
+
+                insert_result = handle_uploaded_excel(SupplierPaymentDict,company_name)                
                 response = HttpResponseRedirect('/payment/showAllPayment/')
-                # print(insert_result)
                 return response
 
         else:
@@ -54,12 +60,33 @@ def upload_file(request):
 
 @login_required
 def showAllPayment(request):
-    generated_doc()
-    b=RegistrationTable.objects.order_by('id')[:10]
 
+    b=RegistrationTable.objects.order_by('-id')[:10]
     return render(request, 'showAllPayment.html', locals())
 
+@login_required
+def download(request):
+    
+    chinese_name= request.user.profile.chinese_name
+    generated_doc(chinese_name)
+    def make_zip(source_dir, output_filename):
+        zipf = zipfile.ZipFile(output_filename, 'w',zipfile.ZIP_DEFLATED)
+        pre_len = len(os.path.dirname(source_dir))
+        for parent, dirnames, filenames in os.walk(source_dir):
+            for filename in filenames:
+                pathfile = os.path.join(parent, filename)
+                arcname = pathfile[pre_len:].strip(os.path.sep)  # 相对路径
+                zipf.write(pathfile, arcname)
+        zipf.close()
 
+    source_dir=sys.path[0]+r"\\doc\\%s\\" %chinese_name
+    output_filename = sys.path[0]+"%s.zip" %chinese_name
+    make_zip(source_dir, output_filename)
+
+    response = StreamingHttpResponse(open(output_filename, "rb").read())
+    response['Content-Type'] = 'application/octet-stream'
+    response['Content-Disposition'] = 'attachment;filename="doc.zip"'
+    return response
 
 
 #@login_required

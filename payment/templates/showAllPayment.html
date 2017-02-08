@@ -42,11 +42,72 @@
         return html.join('');
     }
 </script>
+<script>
+function download(){
 
+		var p = {};
+		$("input[name='received']").each(function(){
+    		var o = new Object()
+			id=$(this).attr("id").substring(7);
+			value=$(this).prop("checked");
+				if (value){
+					o.received=true; ;
+				}else{
+					o.received=false;
+				}
+			p[id]=o
+		})
+
+		 $("input[name='remarks']").each(function(){
+			 var o = new Object()
+			id=$(this).attr("id").substring(7);
+			value=$(this).val();
+
+			if (value){
+				p[id].remarks=value;
+			}else{
+			p[id].remarks="";
+			}
+		})
+
+		 $("input[name='deliver_date']").each(function(){
+			 var o = new Object()
+			id=$(this).attr("id").substring(12);
+			value=$(this).val();
+			if (value){
+				p[id].deliver_date=value;
+			}else{
+			p[id].deliver_date=null;
+			}
+		})
+
+        $("input[name='arrival_date']").each(function(){
+			 var o = new Object()
+			id=$(this).attr("id").substring(12);
+			value=$(this).val();
+			if (value){
+				p[id].arrival_date=value;
+			}else{
+			p[id].arrival_date=null;
+			}
+		})
+
+		var data = JSON.stringify(p);
+
+		$.ajax({
+				  type: 'POST',
+				  url: '/order/updateOrder/',
+				  data: data,
+				  dataType: 'json'
+        });
+        alert("提交成功");
+        window.location.reload();
+	}
+</script>
 
 <div class="container wrap" style='{margin:0 auto} '>
     <h1>查看付款登记表</h1>
-    <form method="post" action="">
+    <form method="post" action="/ddd">
 
 
         <div class="form-group col-xs-12">
@@ -61,7 +122,6 @@
             </div>
             <input class="btn btn-default" value=" 筛选 " type="submit">
         </div>
-
     </form>
 
     <HR style="border:3 double #987cb9" width="95%" color=#987cb9 SIZE=3>
@@ -74,13 +134,13 @@
     <option value="selected">导出勾选的项</option>
   </select>
     </div>
-
+    <form method="post" action="/payment/download/">
     <table id="table" data-toggle="table" data-toolbar="#toolbar" data-show-export="true" data-search="true" data-filter-control="true" data-show-columns="true" data-show-multi-sort="true" data-sort-priority='[{"sortName": "github.count.forks","sortOrder":"desc"},{"sortName":"github.count.stargazers","sortOrder":"desc"}]'
         data-show-pagination-switch="true" data-pagination="true" data-page-size="10" data-page-list="20,50,100,500]" data-detail-view="true" data-detail-formatter="detailFormatter">
         <thead>
             <tr class='warning'>
-                <th data-field="state" data-checkbox="true"></th>
-                
+                <!--<th data-field="state" data-checkbox="true"></th>-->
+                <th>导出</th>
                 <th>最大编号</th>
                 <th data-sortable="true">所属公司</th>
                 <th data-sortable="true">供应商名称</th>
@@ -95,8 +155,7 @@
         <tbody>
             {% for k in b %}
             <tr>
-                <td></td>
-                
+<td><input type="checkbox" name="received" id="receive{{d.id}}"  ></td>                
                 <td>{{k.max_num}}</td>
                 <td>{{k.company_name}}</td>
                 <td>{{k.supplier_name}}</td>
@@ -107,22 +166,21 @@
                 <td>{{k.amount_in_figures}}</td>
                 <td>{{k.record_date}}</td>
                 <td>
-                    <a href="/keyEvent/edit/{{k.id}}">
+                    <a href="/payment/edit/{{k.id}}">
                         <button class="btn btn-danger"><font
                                                             color="#fffafa">编辑</font>
                                                     </button>
                     </a>
-                    <a href="/keyEvent/printKey/{{k.id}}">
-                        <font color="#fffafa">
-                            <button class="btn btn-primary">打印
-                                                </font></button>
-                    </a>
+
                 </td>
             </tr>
             {%endfor%}
 
         </tbody>
     </table>
-
+        <div class="col-md-1">
+                <input class="btn btn-default" value=" 下载 " type="submit">          </div>
+            </form>
 </div>
+
 {% endblock body %}

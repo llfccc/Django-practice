@@ -14,7 +14,7 @@ from django.forms.models import model_to_dict
 
 
 #读取上传后的excel文件
-def handle_uploaded_excel():
+def handle_uploaded_excel(SupplierPaymentDict,company_name):
     pythoncom.CoInitializeEx(pythoncom.COINIT_MULTITHREADED)
     file_name = r"F:\django_wzb\wzb\upload\target2.xlsx"
     table = 'Sheet1'
@@ -29,33 +29,52 @@ def handle_uploaded_excel():
     xlBook.Close(SaveChanges=1)  # 完成 关闭保存文件
 
     del xlApp
-    result=insert_db(data)
+    result=insert_db(data,SupplierPaymentDict,company_name)
 
 
-def insert_db(data):
-    df=pd.DataFrame(list(data[1:]),columns=data[0])
-    price=df.groupby([u'供应商']).sum()[u'结算金额']
-    price=dict(price)
+def insert_db(data,SupplierPaymentDict,company_name):
+    
+    supplierDF=pd.DataFrame.from_dict(SupplierPaymentDict)
 
-    id=5
-    for k,v in price.items():
-        id=id+1
-        p=RegistrationTable(id=id,supplier_name=k,amount_in_figures=v)
-        p.save()
-    return price
+    priceDF=pd.DataFrame(list(data[1:]),columns=data[0])
+    priceDF=pd.DataFrame(priceDF.groupby([u'供应商']).sum()[u'结算金额'])  
+    priceDF.reset_index(level=0, inplace=True)
+    priceDF.columns = ['supplier_name', 'price']
+    priceDF['company_name']=company_name
+    priceDF['record_date']=datetime.datetime.now()
+    priceDF['cheque']='√'
+    priceDF['cash']='×'
+    priceDF['acceptance_bill']='×'
+   
+    resultDF = pd.merge(priceDF,supplierDF , how='left', left_on=['supplier_name','company_name'],
+                    right_on=['supplier_name','company_name'], suffixes=['_l', '_r']) 
 
-def generated_doc(modelName="f:\\f.docx"):
+    print(resultDF)
+    list_to_insert = list()
+    def df2list(x):
+        pt=cnumber()  
+        list_to_insert.append(RegistrationTable(supplier_name=x.supplier_name,amount_in_figures=x.price,bank_account=x.bank_account,\
+            bank_of_deposit=x.bank_of_deposit,closing_date=x.closing_date,amount_in_words=pt.cwchange(x.price),\
+            company_name=x.company_name,record_date=x.record_date,cheque=x.cheque,cash=x.cash,acceptance_bill=x.acceptance_bill))       
+
+    resultDF.apply(lambda x:df2list(x),axis=1)
+    RegistrationTable.objects.bulk_create(list_to_insert)
+
+    return 1
+
+def generated_doc(chinese_name,modelName="f:\\f.docx"):
+  
+    path=sys.path[0]+r"\\doc\\%s\\" %chinese_name
     doc = DocxTemplate(modelName)
     data=RegistrationTable.objects.order_by('id')[10:16]
 
-    pt=cnumber()  
-    print pt.cwchange('600190101000.80')  
     for d in data:
         d=model_to_dict(d) 
         doc = DocxTemplate(modelName)
-        context = { u"companyName" : d['company_name'],u"supplierName" : d['supplier_name'],u"price" : d['amount_in_figures'],u"bankOfDeposit" : d['bank_of_deposit'] }
+        context = { u"company_name" : d['company_name'],u"supplier_name" : d['supplier_name'],u"amount_in_figures" : d['amount_in_figures'],\
+            u"bank_of_deposit" : d['bank_of_deposit'],u"bank_account" : d['bank_account'],u"amount_in_words" : d['amount_in_words']  }
         doc.render(context)
-        doc.save("%s.docx" %context['supplierName'])
+        doc.save(path+"%s.docx" %context['supplier_name'])
 
 
 class cnumber:

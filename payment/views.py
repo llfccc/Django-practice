@@ -100,18 +100,27 @@ def editHandle(request):
         if request.user.has_perm('supplierList.update_all_supplier'):
             if request.method == 'POST':             
                 received_data = dict(request.POST)
+      
                 del received_data['submit']
                 # #删除值为空的字典
                 def changeListToString(data):
                     result={}
-                    for i,j in data.items():
+                    for i,j in data.items():                        
                         if j[0]:
-                            print(i,j)
+      
                             result[i]=j[0];
                     return result
-                    
+                # #字符啊转浮点
+                # def str2float(s):  
+                #     def char2num(s):  
+                #         return {'0': 0, '1': 1, '2': 2, '3': 3, '4': 4, '5': 5, '6': 6, '7': 7, '8': 8, '9': 9}[s]  
+                #     n = s.index('.')  
+                #     return reduce(lambda x,y:x*10+y,map(char2num,s[:n]+s[n+1:]))/(10**n)  
+                # received_data['amount_in_figures']=str2float(received_data['amount_in_figures']) 
+                # except:
+                #     received_data['amount_in_figures']=0
                 received_data=changeListToString (received_data)
-                print (received_data)
+
                 
 
                 # keys = list(received_data.keys())

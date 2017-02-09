@@ -89,6 +89,47 @@ def download(request):
     return response
 
 
+@login_required
+def edit(request,id):
+    data=RegistrationTable.objects.filter(id=id)[0]
+    return render(request, 'editPayment.html', locals())
+
+
+@login_required
+def editHandle(request):
+        if request.user.has_perm('supplierList.update_all_supplier'):
+            if request.method == 'POST':             
+                received_data = dict(request.POST)
+                del received_data['submit']
+                # #删除值为空的字典
+                def changeListToString(data):
+                    result={}
+                    for i,j in data.items():
+                        if j[0]:
+                            print(i,j)
+                            result[i]=j[0];
+                    return result
+                    
+                received_data=changeListToString (received_data)
+                print (received_data)
+                
+
+                # keys = list(received_data.keys())
+                # received_data2={}
+                # for key in keys:
+                #     if  received_data[key][0]:
+                #         received_data2[key]=received_data[key][0]
+    
+                print(received_data)
+                k = RegistrationTable(**received_data)     
+                k.save()
+
+                return HttpResponseRedirect('/payment/showAllPayment/')
+            else:
+                raise Http404
+        else:
+            messages.success(request, '你没有权限访问这个页面')
+            return render(request, 'noPremission.html')
 #@login_required
 # # 显示未经编码的内容
 
@@ -98,10 +139,7 @@ def download(request):
 #     b = KeyEvent.objects.order_by('-id')[:10]
 
 #     return render(request, 'showAllKeyEnvet.html', locals())
-# @login_required
-# def edit(request,id):
-#     data=KeyEvent.objects.filter(id=id)[0]
-#     return render(request, 'edit.html', locals())
+
 
 # @login_required
 

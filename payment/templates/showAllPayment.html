@@ -149,27 +149,22 @@ function download(){
                 <th>金额</th>
                 <th data-sortable="true">填表日期</th>
                 <th>操作</th>
-
             </tr>
         </thead>
         <tbody>
             {% for k in b %}
             <tr>
-<td><input type="checkbox" name="received" id="receive{{d.id}}"  ></td>                
+                <td><input type="checkbox" name="received" id="receive{{d.id}}"  ></td>                
                 <td>{{k.max_num}}</td>
                 <td>{{k.company_name}}</td>
                 <td>{{k.supplier_name}}</td>
-
-
                 <td>{{k.bank_of_deposit}}</td>
                 <td>{{k.bank_account}}</td>
                 <td>{{k.amount_in_figures}}</td>
                 <td>{{k.record_date}}</td>
                 <td>
-                    <a href="/payment/edit/{{k.id}}">
-                        <button class="btn btn-danger"><font
-                                                            color="#fffafa">编辑</font>
-                                                    </button>
+                    <a href="/payment/edit/{{k.id}}">                      <font                   color="red">编辑</font>
+                                                 
                     </a>
 
                 </td>

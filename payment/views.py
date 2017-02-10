@@ -9,10 +9,11 @@ import os,sys,json,time
 from .models import RegistrationTable,SupplierPayment
 from django.db.models import Count, Avg
 from django.contrib.auth.decorators import login_required, permission_required
-#生成pdf
+
 from django.forms.models import model_to_dict
 from django.http import HttpResponse
 from docx_tpl import handle_uploaded_excel,generated_doc
+from convertData import charToNumber,ClosingDate
 from .forms import UploadFileForm
 import zipfile
 from django.http import HttpResponseRedirect ,StreamingHttpResponse
@@ -100,36 +101,27 @@ def editHandle(request):
         if request.user.has_perm('supplierList.update_all_supplier'):
             if request.method == 'POST':             
                 received_data = dict(request.POST)
-      
+                print(received_data)
                 del received_data['submit']
+            
                 # #删除值为空的字典
                 def changeListToString(data):
                     result={}
                     for i,j in data.items():                        
-                        if j[0]:
-      
+                        if j[0]:      
                             result[i]=j[0];
                     return result
-                # #字符啊转浮点
-                # def str2float(s):  
-                #     def char2num(s):  
-                #         return {'0': 0, '1': 1, '2': 2, '3': 3, '4': 4, '5': 5, '6': 6, '7': 7, '8': 8, '9': 9}[s]  
-                #     n = s.index('.')  
-                #     return reduce(lambda x,y:x*10+y,map(char2num,s[:n]+s[n+1:]))/(10**n)  
-                # received_data['amount_in_figures']=str2float(received_data['amount_in_figures']) 
-                # except:
-                #     received_data['amount_in_figures']=0
-                received_data=changeListToString (received_data)
 
-                
-
-                # keys = list(received_data.keys())
-                # received_data2={}
-                # for key in keys:
-                #     if  received_data[key][0]:
-                #         received_data2[key]=received_data[key][0]
-    
-                print(received_data)
+                received_data=changeListToString (received_data)               
+                if not  received_data.has_key('amount_in_words'):
+                    pt=charToNumber()  
+                    received_data['amount_in_words']=pt.cwchange(float(received_data['amount_in_figures']))
+                cd=ClosingDate()
+                x={}
+                x['payment_date']=received_data['payment_date']
+                x['closing_date']=received_data['closing_date']
+                x['transfer_finance']=received_data['transfer_finance']
+                print(cd.getClosingDate(x))
                 k = RegistrationTable(**received_data)     
                 k.save()
 

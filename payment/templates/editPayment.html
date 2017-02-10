@@ -42,7 +42,7 @@
     <div class="container">
         <div class="page-header">
             <h2 align="center">
-                修改关键事件
+                修改付款单
             </h2>
         </div>
 
@@ -52,109 +52,123 @@
             <div class="container-fluid ">
             <div class="row">
                 <form method='POST' action="/payment/editHandle/" class="">
-                    <input type="text" style="display:none;" name="id" value="{{data.id}}">
+                    id:<input type="text" style="display:none;" readonly name="id" value="{{data.id}}">
+                    <input type="text" name="max_num" readonly value="{{data.max_num}}">
                     <div class="form-group col-xs-12">
-                        <label for="supplier_name" class="col-xs-2 control-label">供应商名称</label>
-                        <div class="col-xs-3 ui-widget">
-                            <input type="text" class="form-control " name="supplier_name" id="supplier_name" placeholder="" value="{{data.supplier_name}}">
-                        </div>
-                        <label for="bank_of_deposit" class="col-xs-2 control-label">开户行</label>
-                        <div class="col-xs-2 ">
-                            <input type="text" class="form-control " name="bank_of_deposit" id="bank_of_deposit" placeholder="" value="{{data.bank_of_deposit}}">
+                        <label for="supplier_name" class="col-xs-2 control-label">所属公司</label>
 
+                        <div class="col-xs-3 ui-widget">
+                                         <input type="text" class="form-control" name="company_name"
+                                       id="order_id" placeholder="" value="{{data.company_name}}">
+
+                          
+                        </div>
+
+                        <label for="bank_of_deposit" class="col-xs-1 control-label">开户行</label>
+                        <div class="col-xs-3 ">
+                            <input type="text" class="form-control " name="bank_of_deposit" id="bank_of_deposit" placeholder="" value="{{data.bank_of_deposit}}">
 
                         </div>
                         <label for="record_date" class="col-xs-1 control-label">登记日期</label>
                         <div class="col-xs-2">
-                            <input type="text" class="form-control" id="record_date" readonly placeholder="" value="{{data.record_date}}">
+                            <input type="text" class="form-control" name="record_date"
+                                       id="record_date" readonly placeholder="" value="{{data.record_date|date:"Y-m-d"}}">
+                    
                         </div>
 
+                        </div>
+                                                <div class="form-group col-xs-12">
+                                <label for="acceptance_bill" class="col-xs-2 control-label">承兑汇票</label>
+                            <div class="col-xs-3">
+                                <input type="text" class="form-control" name="acceptance_bill"
+                                       id="acceptance_bill" placeholder="" value="{{data.acceptance_bill}}">
+                            </div>
+
+                            <label for="cheque" class="col-xs-2 control-label">支票/网银</label>
+                            <div class="col-xs-2">
+                                <input type="text" class="form-control" name="cheque"
+                                       id="cheque" placeholder=""
+                                       value="{{data.cheque}}">
+                            </div>
+                            <label for="cash" class="col-xs-1 control-label">现金</label>
+                            <div class="col-xs-2">
+                                <input type="text" class="form-control" name="cash"
+                                       id="cash" placeholder=""
+                                       value="{{data.cash}}">
+                            </div>     
                         </div>
                         <div class="form-group col-xs-12">
-                            <label for="belong_to" class="col-xs-2 control-label">所属公司</label>
+                            <label for="belong_to" class="col-xs-2 control-label">收款人</label>
+
                             <div class="col-xs-3 ">
-                                 <input type="text" class="form-control" name="company_name"
-                                       id="order_id" placeholder="" value="{{data.company_name}}">
+                      <input type="text" class="form-control " name="supplier_name" id="supplier_name" placeholder="" value="{{data.supplier_name}}">
 
                             </div>
-                            <label for="bank_account" class="col-xs-2 control-label">银行账号</label>
-                            <div class="col-xs-2">
+
+                            <label for="bank_account" class="col-xs-1 control-label">银行账号</label>
+                            <div class="col-xs-3">
                                 <input type="text" class="form-control" name="bank_account"
                                        id="bank_account" placeholder="" value="{{data.bank_account}}">
                             </div>
-                            <label for="planed_date" class="col-xs-1 control-label">金额</label>
+                                                   <label for="document_num" class="col-xs-1 control-label">单据号</label>
+                            <div class="col-xs-3">
+                                <input type="text" class="form-control" name="document_num"
+                                       id="document_num" placeholder="" value="{{data.document_num}}">
+                            </div>
+                           
+                        </div>
+                        <div class="form-group col-xs-12">
+                             <label for="planed_date" class="col-xs-1 control-label">金额</label>
                             <div class="col-xs-2">
                                 <input type="text" class="form-control" name="amount_in_figures"
                                        id="amount_in_figures" placeholder="" value="{{data.amount_in_figures}}">
                             </div>
-                        </div>
-                        <div class="form-group col-xs-12">
-                            <label for="planed_quantity" class="col-xs-2 control-label">计划到货量</label>
+                            <label for="amount_in_words" class="col-xs-2 control-label">大写金额</label>
                             <div class="col-xs-3">
-                                <input type="text" class="form-control" name="planed_quantity"
-                                       id="planed_quantity" placeholder="" value="{{data.planed_quantity}}">
+                                <input type="text" class="form-control" name="amount_in_words"
+                                       id="amount_in_words" placeholder="" value="{{data.amount_in_words}}">
                             </div>
-                            <label for="material_name" class="col-xs-2 control-label">供应物资</label>
+     
+                                                    <label for="payment_date" class="col-xs-1 control-label">付款期限</label>
                             <div class="col-xs-2">
-                                <input type="text" class="form-control" name="material_name"
-                                       id="material_name" placeholder="" value="{{data.material_name}}">
+                                <input type="text" class="form-control" name="payment_date"
+                                       id="payment_date" placeholder=""
+                                       value="{{data.payment_date }}">
                             </div>
                         </div>
 
+
+                        <div class="form-group col-xs-12">
+ 
+
+                            <label for="transfer_finance" class="col-xs-1 control-label">实际收票日</label>
+                            <div class="col-xs-2">
+                                <input type="text" class="form-control" name="transfer_finance"
+                                       id="transfer_finance" placeholder="" value="{{data.transfer_finance}}">
+                            </div>
+                                                        <label for="closing_date" class="col-xs-2 control-label">货期</label>
+                            <div class="col-xs-2">
+                                <input type="text" class="form-control" name="closing_date"
+                                       id="closing_date" placeholder="" value="{{data.closing_date}}">
+                            </div>
+                                                       <label for="quality_deduction" class="col-xs-2 control-label">到期日</label>
+                            <div class="col-xs-3">
+                                <input type="text" class="form-control" name="expiring_date"
+                                       id="expiring_date" placeholder="" value="{{data.expiring_date|date:"Y-m-d"}}">
+                            </div>
+                        </div>
+
+                  
+                            <!--
                         <div class=" form-group col-xs-12">
 
-                            <label for="event_description" class="col-xs-2 control-label">事件描述</label>
+                            <label for="remark" class="col-xs-2 control-label">备注</label>
                             <div class="col-xs-10">
-                                    <textarea type='text' class="form-control" name="event_description"
-                                              id="event_description"
-                                              rows="3">{{data.event_description}}</textarea>
+                                    <textarea type='text' class="form-control" name="remark"
+                                              id="remark"
+                                              rows="3">{{data.remark}}</textarea>
                             </div>
-                        </div>
-
-                        <div class="form-group col-xs-12">
-                            <label for="quality_deduction" class="col-xs-2 control-label">质量扣分</label>
-                            <div class="col-xs-3">
-                                <input type="text" class="form-control" name="quality_deduction"
-                                       id="quality_deduction" placeholder="" value="{{data.quality_deduction}}">
-                            </div>
-                            <label for="supply_deduction" class="col-xs-2 control-label">供应扣分</label>
-                            <div class="col-xs-2">
-                                <input type="text" class="form-control" name="supply_deduction"
-                                       id="supply_deduction" placeholder="" value="{{data.supply_deduction}}">
-                            </div>
-                            <label for="service_deduction" class="col-xs-1 control-label">服务扣分</label>
-                            <div class="col-xs-2">
-                                <input type="text" class="form-control" name="service_deduction"
-                                       id="service_deduction" placeholder="" value="{{data.service_deduction}}">
-                            </div>
-                        </div>
-                        <div class="form-group col-xs-12">
-                            <label for="warehouse_deduction" class="col-xs-2 control-label">仓存控制扣分</label>
-                            <div class="col-xs-3">
-                                <input type="text" class="form-control" name="warehouse_deduction"
-                                       id="warehouse_deduction" placeholder=""
-                                       value="{{data.warehouse_deduction}}">
-                            </div>
-                            <label for="special_bonus_point" class="col-xs-2 control-label">特别奖励得分</label>
-                            <div class="col-xs-2">
-                                <input type="text" class="form-control" name="special_bonus_point"
-                                       id="special_bonus_point" placeholder=""
-                                       value="{{data.special_bonus_point}}">
-                            </div>
-                            <label for="special_penalty_point" class="col-xs-1 control-label">特别扣分</label>
-                            <div class="col-xs-2">
-                                <input type="text" class="form-control" name="special_penalty_point"
-                                       id="special_penalty_point" placeholder=""
-                                       value="{{data.special_penalty_point}}">
-                            </div>
-                        </div>
-                        <div class="form-group col-xs-12">
-                            <label for="delay_batch" class="col-xs-2 control-label">延迟批次</label>
-                            <div class="col-xs-3">
-                                <input type="text" class="form-control" name="delay_batch"
-                                       id="delay_batch" placeholder="" value="{{data.delay_batch}}">
-                            </div>
-                            <div class="col-xs-3"></div>
+                        </div>-->
                             <div class="col-xs-2">
                                 <input type="submit" name="submit" value="提交">
                             </div>

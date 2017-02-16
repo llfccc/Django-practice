@@ -37,8 +37,7 @@ class charToNumber:
         return chk
         
     def cwchange(self,data):
-        cdata=str(data).split('.')
-        
+        cdata=str(data).split('.')        
         cki=cdata[0]
         ckj=cdata[1]
         i=0
@@ -76,7 +75,7 @@ class ClosingDate():
         self.n=int(str(self.transfer_finance)[8:10])   #取当前日期的天数
         self.payment_date=int(x['payment_date'])
         self.closing_date=x['closing_date']
-
+        
     def getClosingDate(self):        
         #payment_date是付款期限        
         #closing——date 是收票日
@@ -90,24 +89,28 @@ class ClosingDate():
                 closing_dateListInt.append(int(t))
             except:
                 pass
-        #获取最后付款时间        
-        if closing_dateListInt:
-            if self.payment_date==30:
-                resultDate=datetime.datetime(self.now_date.year,self.now_date.month+1,min(closing_dateListInt))                 
-            else:
-                if closing_dateListInt[0]==0 and len(closing_dateListInt)==1:
-                    resultDate=self.transfer_finance+datetime.timedelta(days=self.payment_date)
-                else:
-                    for t in closing_dateListInt:
-                        if self.n>max(closing_dateListInt):
-                            print("max")
-                            resultDate=datetime.datetime(self.transfer_finance.year,self.transfer_finance.month+1,min(closing_dateListInt))+datetime.timedelta(days=self.payment_date)   
-                            break
-                        if t>self.n:
-                            print(t-self.n)
-                            resultDate=self.transfer_finance+datetime.timedelta(days=(t-self.n+self.payment_date))
-                            break 
-        else:
-            resultDate=None
+        #获取最后付款时间       
 
+        #求天数
+        def getDayMonth():
+            day=0
+            monthAdd=0
+            if closing_dateListInt[0]==0 and len(closing_dateListInt)==1:
+                day=self.n
+                return (monthAdd,day)     
+            if closing_dateListInt:
+                for t in closing_dateListInt:
+                    if self.n>max(closing_dateListInt):
+                        monthAdd=monthAdd+1
+                        day=min(closing_dateListInt)
+                        return (monthAdd,day)
+                    if t>self.n:  
+                        day=t
+                        return (monthAdd,day)   
+        monthAdd,day=getDayMonth()
+        if self.payment_date==30:
+            monthAdd+=1
+            resultDate=datetime.datetime(self.transfer_finance.year,self.transfer_finance.month+monthAdd,day)
+        else:
+            resultDate=datetime.datetime(self.transfer_finance.year,self.transfer_finance.month+monthAdd,day)+datetime.timedelta(days=self.payment_date)   
         return resultDate

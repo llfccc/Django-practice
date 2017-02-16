@@ -6,5 +6,5 @@ doc
 downloadModel
 .node-gyp
 .npm
-.pyc
-.docx
+*.pyc
+*.docx

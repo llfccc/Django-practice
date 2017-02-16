@@ -150,8 +150,12 @@ def download(request):
 
 @login_required
 def edit(request,id):
-    data=RegistrationTable.objects.filter(id=id)[0]
-    return render(request, 'editPayment.html', locals())
+    if request.user.has_perm('payment.edit_supplier_payment'):
+        data=RegistrationTable.objects.filter(id=id)[0]
+        return render(request, 'editPayment.html', locals())
+    else:
+        messages.success(request, '你没有权限访问这个页面')
+        return render(request, 'noPremission.html')
 
 
 @login_required
@@ -162,7 +166,7 @@ def delete(request,id):
 @login_required
 def editHandle(request):
         chinese_name= request.user.profile.chinese_name
-        if request.user.has_perm('supplierList.update_all_supplier'):
+        if request.user.has_perm('payment.edit_supplier_payment'):
             if request.method == 'POST':             
                 received_data = dict(request.POST)
                 

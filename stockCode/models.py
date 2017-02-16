@@ -84,7 +84,7 @@ class MeasurementUnit(models.Model):
     measurement_unit=models.CharField(max_length=255)
     measurement_unit_group_code= models.CharField(max_length=255)
     measurement_unit_code= models.CharField( max_length=255)
-    accounts_set= models.CharField( max_length=255)
+    accounts_set= models.CharField( max_length=255, blank=True)
     def __unicode__(self):
         return self.measurement_unit
 

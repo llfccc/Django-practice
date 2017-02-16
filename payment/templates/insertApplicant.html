@@ -1,0 +1,23 @@
+{% extends "base.html" %} {% block title %} 新增编码 {% endblock%} {% block head %} {{ block.super }} {% endblock%} {% block body %} {{ block.super }}
+
+
+<style>
+    .wrap {
+        margin: 0px auto;
+    }
+</style>
+
+    <div class="container wrap" style='{margin:0 auto} '>
+      <div class="col-md-3 col-xm-4">
+        <!-- <h1>上传文件</h1>
+     <p>1.上传文件需为excel2007版格式（即扩展名以xlsx结尾）</p>
+     <p>2.服务器需要几秒钟上传保存和解析文件，如果20s没有反应请稍后再试，如果还不成功，请通知管理员</p> -->
+        <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+          {% load bootstrap3 %}
+            {% bootstrap_form form %}
+            {% bootstrap_button "提交" button_type="submit" button_class="btn-info" %}
+        </form>
+    </div>
+</div>
+{% endblock%}

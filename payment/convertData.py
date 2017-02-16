@@ -72,15 +72,16 @@ class charToNumber:
 class ClosingDate():
         #计算货期
     def __init__(self,x):        
-        now_date=datetime.datetime.now()
-        n=int(str(now_date)[8:10])   #取当前日期的天数
-        payment_date=int(x['payment_date'])
-        closing_date=x['closing_date']
+        self.transfer_finance=datetime.datetime.strptime(x['transfer_finance'], "%Y-%m-%d")  
+        self.n=int(str(self.transfer_finance)[8:10])   #取当前日期的天数
+        self.payment_date=int(x['payment_date'])
+        self.closing_date=x['closing_date']
+
     def getClosingDate(self):        
         #payment_date是付款期限        
         #closing——date 是收票日
-        if closing_date:
-            closing_dateList=closing_date.split(u'、')
+        if self.closing_date:
+            closing_dateList=self.closing_date.split(u'、')
         else:
             closing_dateList=[]
         closing_dateListInt=[]
@@ -92,18 +93,18 @@ class ClosingDate():
         #获取最后付款时间        
         if closing_dateListInt:
             if closing_dateListInt[0]==0 and len(closing_dateListInt)==1:
-                resultDate=now_date+datetime.timedelta(days=payment_date)
+                resultDate=self.transfer_finance+datetime.timedelta(days=self.payment_date)
             else:
                 for t in closing_dateListInt:
-                    if n>max(closing_dateListInt):
+                    if self.n>max(closing_dateListInt):
                         print("max")
-                        resultDate=datetime.datetime(now_date.year,now_date.month+1,min(closing_dateListInt))+datetime.timedelta(days=payment_date)   
+                        resultDate=datetime.datetime(self.transfer_finance.year,self.transfer_finance.month+1,min(closing_dateListInt))+datetime.timedelta(days=self.payment_date)   
                         break
-                    if t>n:
-                        print(t-n)
-                        resultDate=now_date+datetime.timedelta(days=(t-n+payment_date))
+                    if t>self.n:
+                        print(t-self.n)
+                        resultDate=self.transfer_finance+datetime.timedelta(days=(t-self.n+self.payment_date))
                         break 
         else:
             resultDate=None
-        print(resultDate)
+
         return resultDate

@@ -1,4 +1,4 @@
-{% extends "base.html" %} {% block title %} 查看关键事件 {% endblock%} {% block body %} {{ block.super }} {% load el_pagination_tags %}
+{% extends "base.html" %} {% block title %} 修改付款登记表 {% endblock%} {% block body %} {{ block.super }} {% load el_pagination_tags %}
 <style>
     .wrap {
         margin: 0px auto;
@@ -19,7 +19,6 @@
         $("#end_date").datepicker("option", "dateFormat", val);
     });
 </script>
-
 
 <script>
     var $table = $('#table');
@@ -42,74 +41,10 @@
         return html.join('');
     }
 </script>
-<script>
-function download(){
-
-		var p = {};
-		$("input[name='received']").each(function(){
-    		var o = new Object()
-			id=$(this).attr("id").substring(7);
-			value=$(this).prop("checked");
-				if (value){
-					o.received=true; ;
-				}else{
-					o.received=false;
-				}
-			p[id]=o
-		})
-
-		 $("input[name='remarks']").each(function(){
-			 var o = new Object()
-			id=$(this).attr("id").substring(7);
-			value=$(this).val();
-
-			if (value){
-				p[id].remarks=value;
-			}else{
-			p[id].remarks="";
-			}
-		})
-
-		 $("input[name='deliver_date']").each(function(){
-			 var o = new Object()
-			id=$(this).attr("id").substring(12);
-			value=$(this).val();
-			if (value){
-				p[id].deliver_date=value;
-			}else{
-			p[id].deliver_date=null;
-			}
-		})
-
-        $("input[name='arrival_date']").each(function(){
-			 var o = new Object()
-			id=$(this).attr("id").substring(12);
-			value=$(this).val();
-			if (value){
-				p[id].arrival_date=value;
-			}else{
-			p[id].arrival_date=null;
-			}
-		})
-
-		var data = JSON.stringify(p);
-
-		$.ajax({
-				  type: 'POST',
-				  url: '/order/updateOrder/',
-				  data: data,
-				  dataType: 'json'
-        });
-        alert("提交成功");
-        window.location.reload();
-	}
-</script>
 
 <div class="container wrap" style='{margin:0 auto} '>
-    <h1>查看付款登记表</h1>
-    <form method="post" action="/ddd">
-
-
+    <h1>查看修改付款登记表</h1>
+    <form method="post" action="">
         <div class="form-group col-xs-12">
             <label for="start_date" class="col-xs-3 control-label">编码提交日期(不输入则取当前日期)</label>
             <div class="col-xs-2">
@@ -148,8 +83,7 @@ function download(){
                 <th data-sortable="true">所属公司</th>
                 <th data-sortable="true">收款人</th>
                 <th>开户行</th>
-                <th>银行账号</th>
-                
+                <th>银行账号</th>                
                 <th>小写金额</th>
                 <th>大写金额</th>
                 <th>承兑汇票</th>
@@ -167,10 +101,9 @@ function download(){
         <tbody>
             {% for k in b %}
             <tr>
-                <td><input type="checkbox" name="received" id="receive{{d.id}}"  ></td>        
+                <td><input type="checkbox" name="received{{k.id}}" id="receive{{k.id}}"  ></td>        
                                 <td>
-                    <a href="/payment/edit/{{k.id}}">                      <font                   color="red">编辑</font>
-                                                 
+                    <a href="/payment/edit/{{k.id}}">                      <font                   color="red">编辑</font>                                                 
                     </a>        
                 <td>{{k.max_num}}</td>
                 <td>{{k.record_date}}</td>
@@ -181,22 +114,15 @@ function download(){
                 <td>{{k.bank_account}}</td>
                 <td>{{k.amount_in_figures}}</td>
                 <td>{{k.amount_in_words}}</td>
-
                 <td>{{k.acceptance_bill}}</td>
                 <td>{{k.cash}}</td>
                 <td>{{k.cheque}}</td>
-
                 <td>{{k.transfer_finance}}</td>
                 <!--<td>{{k.payment_in_advance}}</td>-->
                 <td>{{k.closing_date}}</td>
                 <td>{{k.payment_date}}</td>
                 <!--<td>{{k.posting_date}}</td>-->
-                <td>{{k.expiring_date}}</td>
-                
-             
-  
-
-
+                <td>{{k.expiring_date}}</td>         
                 </td>
             </tr>
             {%endfor%}

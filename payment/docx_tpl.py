@@ -12,9 +12,9 @@ import pythoncom
 from .models import RegistrationTable
 from django.forms.models import model_to_dict  
 from django.db import connection
-
+import shutil  
 #读取上传后的excel文件
-def handle_uploaded_excel(SupplierPaymentDict,company_name):
+def handle_uploaded_excel():
     pythoncom.CoInitializeEx(pythoncom.COINIT_MULTITHREADED)
     file_name = r"F:\django_wzb\wzb\upload\target2.xlsx"
     table = 'Sheet1'
@@ -29,13 +29,14 @@ def handle_uploaded_excel(SupplierPaymentDict,company_name):
     xlBook.Close(SaveChanges=1)  # 完成 关闭保存文件
 
     del xlApp
-    result=insert_db(data,SupplierPaymentDict,company_name)
+    print(data[0])
+    return data
 
+def insert_db(data,SupplierPaymentDict,company_name,chinese_name):
 
-def insert_db(data,SupplierPaymentDict,company_name):
-    
     supplierDF=pd.DataFrame.from_dict(SupplierPaymentDict)
     now_date=datetime.datetime.now()
+
     priceDF=pd.DataFrame(list(data[1:]),columns=data[0])
     priceDF=pd.DataFrame(priceDF.groupby([u'供应商',u'发票号']).sum()[u'结算金额'])  
     priceDF.reset_index(level=0, inplace=True)
@@ -62,11 +63,11 @@ def insert_db(data,SupplierPaymentDict,company_name):
     list_to_insert = list()
     def df2list(x,currentMax):
         currentMax[0]+=1        
-        pt=charToNumber()  
+ 
         list_to_insert.append(RegistrationTable(supplier_name=x.supplier_name,amount_in_figures=x.amount_in_figures,bank_account=x.bank_account,\
             bank_of_deposit=x.bank_of_deposit,closing_date=x.closing_date,max_num=currentMax[0],\
             company_name=x.company_name,record_date=x.record_date,cheque=x.cheque,cash=x.cash,acceptance_bill=x.acceptance_bill,document_num=x.document_num,\
-            payment_date=x.payment_date))    
+            payment_date=x.payment_date,applicant=chinese_name))    
 
     #将df保存为一个列表，以便批量插入数据库
     resultDF.apply(lambda x:df2list(x,currentMax),axis=1)
@@ -75,11 +76,17 @@ def insert_db(data,SupplierPaymentDict,company_name):
 
     return 1
 
-def generated_doc(chinese_name,modelName="f:\\f.docx"):
-  
+def generated_doc(chinese_name,data,modelName="e:\\f.docx"):
     path=sys.path[0]+r"\\doc\\%s\\" %chinese_name
-    doc = DocxTemplate(modelName)
-    data=RegistrationTable.objects.order_by('id')[10:16]
+    try:
+        shutil.rmtree(path)  
+    except:
+        pass
+    print(path)
+    os.mkdir(path)  
+    
+    #path=r'e:'+r"\\doc\\%s\\" %chinese_name
+    doc = DocxTemplate(modelName)    
 
     for d in data:
         d=model_to_dict(d) 

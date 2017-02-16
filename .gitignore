@@ -2,6 +2,8 @@ blob-store
 compile-cache
 dev
 storage
+doc
+downloadModel
 .node-gyp
 .npm
 .pyc

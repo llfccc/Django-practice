@@ -31,7 +31,7 @@ class RegistrationTable(models.Model):
     transfer_finance = models.CharField(max_length=255, blank=True, null=True)  # Field renamed to remove unsuitable characters. Field renamed because it started with '_'. Field renamed because it ended with '_'. Field renamed because of name conflict.
     payment_in_advance = models.CharField( max_length=255,blank=True, null=True)  # Field renamed to remove unsuitable characters. Field renamed because it started with '_'. Field renamed because it ended with '_'. Field renamed because of name conflict.
     applicant=models.CharField( max_length=255,blank=True, null=True)
-
+    deleted=models.CharField( max_length=255,blank=True, null=True)
 
 class SupplierPayment(models.Model):
 

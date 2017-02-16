@@ -92,18 +92,21 @@ class ClosingDate():
                 pass
         #获取最后付款时间        
         if closing_dateListInt:
-            if closing_dateListInt[0]==0 and len(closing_dateListInt)==1:
-                resultDate=self.transfer_finance+datetime.timedelta(days=self.payment_date)
+            if self.payment_date==30:
+                resultDate=datetime.datetime(self.now_date.year,self.now_date.month+1,min(closing_dateListInt))                 
             else:
-                for t in closing_dateListInt:
-                    if self.n>max(closing_dateListInt):
-                        print("max")
-                        resultDate=datetime.datetime(self.transfer_finance.year,self.transfer_finance.month+1,min(closing_dateListInt))+datetime.timedelta(days=self.payment_date)   
-                        break
-                    if t>self.n:
-                        print(t-self.n)
-                        resultDate=self.transfer_finance+datetime.timedelta(days=(t-self.n+self.payment_date))
-                        break 
+                if closing_dateListInt[0]==0 and len(closing_dateListInt)==1:
+                    resultDate=self.transfer_finance+datetime.timedelta(days=self.payment_date)
+                else:
+                    for t in closing_dateListInt:
+                        if self.n>max(closing_dateListInt):
+                            print("max")
+                            resultDate=datetime.datetime(self.transfer_finance.year,self.transfer_finance.month+1,min(closing_dateListInt))+datetime.timedelta(days=self.payment_date)   
+                            break
+                        if t>self.n:
+                            print(t-self.n)
+                            resultDate=self.transfer_finance+datetime.timedelta(days=(t-self.n+self.payment_date))
+                            break 
         else:
             resultDate=None
 

@@ -94,7 +94,8 @@
                 <th>货期</th>
                 <th>付款期限</th>
                 <!--<th>入账日</th>-->
-                <th>到期日</th>                
+                <th>到期日</th>    
+                <th>    删除</th>            
        
             </tr>
         </thead>
@@ -123,7 +124,8 @@
                 <td>{{k.payment_date}}</td>
                 <!--<td>{{k.posting_date}}</td>-->
                 <td>{{k.expiring_date}}</td>         
-                </td>
+                <td>                 <a href="/payment/delete/{{k.id}}"> <font color="red">删除</font>                                                 
+                    </a>   </td>
             </tr>
             {%endfor%}
 

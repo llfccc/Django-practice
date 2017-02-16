@@ -110,10 +110,9 @@ def showAllPayment(request):
         else:
             end_date =  datetime.datetime.strptime(end_date, "%Y-%m-%d").date()+ datetime.timedelta(days=1)
 
-    
-        b=RegistrationTable.objects.filter(applicant=chinese_name).filter(record_date__range=(start_date, end_date)).order_by('-id')[:10]
+        b=RegistrationTable.objects.filter(deleted='0').filter(applicant=chinese_name).filter(record_date__range=(start_date, end_date)).order_by('-id')[:10]
     else:
-        b=RegistrationTable.objects.filter(applicant=chinese_name).order_by('-id')[:10]
+        b=RegistrationTable.objects.filter(deleted='0').filter(applicant=chinese_name).order_by('-id')[:10]
     
     return render(request, 'showAllPayment.html', locals())
 
@@ -156,6 +155,11 @@ def edit(request,id):
 
 
 @login_required
+def delete(request,id):
+    obj=RegistrationTable.objects.filter(id=id).update(deleted='1')
+    return HttpResponseRedirect('/payment/showAllPayment/')
+
+@login_required
 def editHandle(request):
         chinese_name= request.user.profile.chinese_name
         if request.user.has_perm('supplierList.update_all_supplier'):
@@ -171,15 +175,12 @@ def editHandle(request):
                         if j[0]:      
                             result[i]=j[0];
                     return result
-
-                received_data=changeListToString (received_data)    
-                           
+                received_data=changeListToString (received_data)                               
                 if   received_data.get('amount_in_words')==None: 
                     pass
                 else:
                     pt=charToNumber()  
-                    received_data['amount_in_words']=pt.cwchange(float(received_data['amount_in_figures']))
-      
+                    received_data['amount_in_words']=pt.cwchange(float(received_data['amount_in_figures']))      
                 x={}
                 x['payment_date']=received_data['payment_date']
                 x['closing_date']=received_data['closing_date']
@@ -189,6 +190,7 @@ def editHandle(request):
                     received_data['expiring_date']= cd.getClosingDate()                
 
                 received_data['applicant']=chinese_name
+                received_data['deleted']=0
                 k = RegistrationTable(**received_data)     
                 k.save()
 
@@ -198,62 +200,3 @@ def editHandle(request):
         else:
             messages.success(request, '你没有权限访问这个页面')
             return render(request, 'noPremission.html')
-#@login_required
-# # 显示未经编码的内容
-
-# @login_required
-# def showAllKeyEvents(request):
-#     chinese_name = request.user.profile.chinese_name
-#     b = KeyEvent.objects.order_by('-id')[:10]
-
-#     return render(request, 'showAllKeyEnvet.html', locals())
-
-
-# @login_required
-
-# def insert(request):
-#     #if request.user.has_perm('supplierList.query_supplier'):
-#     data=SupplierList.objects.values("supplier_name").filter(supplier_name__isnull=False).annotate(sid=Count("supplier_name")).order_by("-id")
-#     data=json.dumps(list(data))
-#     #data=list(data)
-
-#     return render(request, 'insert.html', locals())
-
-# @login_required
-# def insertHandle(request):
-#         if request.user.has_perm('supplierList.update_all_supplier'):
-#             if request.method == 'POST':
-             
-#                 received_data = dict(request.POST)
-#                 del received_data['submit']
-#                 # #删除值为空的字典
-#                 def changeListToString(data):
-#                     result={}
-#                     for i,j in data.items():
-#                         if j[0]:
-#                             print(i,j)
-#                             result[i]=j[0];
-#                     return result
-                    
-#                 received_data=changeListToString (received_data)
-#                 print (received_data)
-                
-
-#                 # keys = list(received_data.keys())
-#                 # received_data2={}
-#                 # for key in keys:
-#                 #     if  received_data[key][0]:
-#                 #         received_data2[key]=received_data[key][0]
-    
-#                 print(received_data)
-#                 k = KeyEvent(**received_data)     
-#                 k.save()
-
-#                 return HttpResponseRedirect('/keyEvent/showAllKeyEvents/')
-#             else:
-#                 raise Http404
-#         else:
-#             messages.success(request, '你没有权限访问这个页面')
-#             return render(request, 'noPremission.html')
-
-

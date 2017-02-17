@@ -47,7 +47,7 @@ def upload_file(request):
 
                 data = handle_uploaded_excel()      
                 result=insert_db(data,SupplierPaymentDict,company_name,chinese_name)          
-                response = HttpResponseRedirect('/payment/showAllPayment/')
+                response = HttpResponseRedirect('/payment/showPayment/')
                 return response
 
         else:
@@ -65,7 +65,7 @@ def upload_file(request):
 @login_required
 def insertPayment(request):
     chinese_name = request.user.profile.chinese_name
-    if request.user.has_perm('stockCode.add_codetable'):
+    if request.user.has_perm('payment.edit_payment'):
         if request.method == 'POST':
             form_content = ApplicantForm(request.POST)
             if form_content.is_valid():
@@ -87,7 +87,7 @@ def insertPayment(request):
                 messages.success(request, '添加成功，请确认是否已包含所有条目')
                 # message=u'提交了一批文档'
                 # add_note(request,request.user,message)
-                return HttpResponseRedirect('/payment/showAllPayment/')
+                return HttpResponseRedirect('/payment/showPayment/')
         else:
             form = ApplicantForm(initial={'user_id':1})
             return render(request, 'insertApplicant.html', locals())
@@ -95,26 +95,105 @@ def insertPayment(request):
         messages.success(request, '你没有权限访问这个页面')
         return render(request, 'noPremission.html')
 
+@login_required
+def showPayment(request):
+    if request.user.has_perm('payment.edit_payment'):
+        chinese_name = request.user.profile.chinese_name
+        if request.method == 'POST':
+            start_date=request.POST['start_date']
+            end_date=request.POST['end_date']
+            if not start_date:
+                start_date=time.strftime('%Y-%m-%d',time.localtime(time.time()))
+            if not end_date:
+                end_date=datetime.date.today() + datetime.timedelta(days=1)
+            else:
+                end_date =  datetime.datetime.strptime(end_date, "%Y-%m-%d").date()+ datetime.timedelta(days=1)
+            b=RegistrationTable.objects.filter(deleted='0').filter(applicant=chinese_name).filter(record_date__range=(start_date, end_date)).order_by('-id')
+        else:
+            start_date=time.strftime('%Y-%m-%d',time.localtime(time.time()))
+            end_date=datetime.date.today() + datetime.timedelta(days=1)
+            b=RegistrationTable.objects.filter(deleted='0').filter(applicant=chinese_name).filter(record_date__range=(start_date, end_date)).order_by('-id')   
+        return render(request, 'showPayment.html', locals())
+    else:
+        messages.success(request, '你没有权限访问这个页面')
+        return render(request, 'noPremission.html')
 
 @login_required
 def showAllPayment(request):
-    chinese_name = request.user.profile.chinese_name
-    if request.method == 'POST':
-        start_date=request.POST['start_date']
-        end_date=request.POST['end_date']
-        if not start_date:
-            start_date=time.strftime('%Y-%m-%d',time.localtime(time.time()))
-        if not end_date:
-
-            end_date=datetime.date.today() + datetime.timedelta(days=1)
+    if request.user.has_perm('payment.query_payment'):     
+        if request.method == 'POST':
+            start_date=request.POST['start_date']
+            end_date=request.POST['end_date']
+            if not start_date:
+                start_date=time.strftime('%Y-%m-%d',time.localtime(time.time()))
+            if not end_date:
+                end_date=datetime.date.today() + datetime.timedelta(days=1)
+            else:
+                end_date =  datetime.datetime.strptime(end_date, "%Y-%m-%d").date()+ datetime.timedelta(days=1)
+            b=RegistrationTable.objects.filter(deleted='0').filter(record_date__range=(start_date, end_date)).order_by('-id')
         else:
-            end_date =  datetime.datetime.strptime(end_date, "%Y-%m-%d").date()+ datetime.timedelta(days=1)
-
-        b=RegistrationTable.objects.filter(deleted='0').filter(applicant=chinese_name).filter(record_date__range=(start_date, end_date)).order_by('-id')[:10]
+            start_date=time.strftime('%Y-%m-%d',time.localtime(time.time()))
+            end_date=datetime.date.today() + datetime.timedelta(days=1)
+            b=RegistrationTable.objects.filter(deleted='0').filter(record_date__range=(start_date, end_date)).order_by('-id') 
+        return render(request, 'showAllPayment.html', locals())
     else:
-        b=RegistrationTable.objects.filter(deleted='0').filter(applicant=chinese_name).order_by('-id')[:10]
-    
-    return render(request, 'showAllPayment.html', locals())
+        messages.success(request, '你没有权限访问这个页面')
+        return render(request, 'noPremission.html')
+        
+
+
+@login_required
+def edit(request,id):
+    if request.user.has_perm('payment.edit_payment'):
+        data=RegistrationTable.objects.filter(id=id)[0]
+        return render(request, 'editPayment.html', locals())
+    else:
+        messages.success(request, '你没有权限访问这个页面')
+        return render(request, 'noPremission.html')
+
+
+@login_required
+def delete(request,id):
+    obj=RegistrationTable.objects.filter(id=id).update(deleted='1')
+    return HttpResponseRedirect('/payment/showPayment/')
+
+@login_required
+def editHandle(request):
+        chinese_name= request.user.profile.chinese_name
+        if request.user.has_perm('payment.edit_payment'):
+            if request.method == 'POST':             
+                received_data = dict(request.POST)                
+                del received_data['submit']            
+                # #删除值为空的字典
+                def changeListToString(data):
+                    result={}
+                    for i,j in data.items():                        
+                        if j[0]:      
+                            result[i]=j[0];
+                    return result
+                received_data=changeListToString (received_data)                               
+                if  not received_data.get('amount_in_words'): 
+                    pt=charToNumber()  
+                    received_data['amount_in_words']=pt.cwchange(float(received_data['amount_in_figures']))      
+                x={}
+                x['payment_date']=received_data['payment_date']
+                x['closing_date']=received_data['closing_date']
+                x['transfer_finance']=received_data['transfer_finance']
+                if not received_data.get('expiring_date'):          
+                    cd=ClosingDate(x)                    
+                    received_data['expiring_date']= cd.getClosingDate()                
+
+                received_data['applicant']=chinese_name
+                received_data['deleted']=0
+                k = RegistrationTable(**received_data)     
+                k.save()
+
+                return HttpResponseRedirect('/payment/showPayment/')
+            else:
+                raise Http404
+        else:
+            messages.success(request, '你没有权限访问这个页面')
+            return render(request, 'noPremission.html')
 
 @login_required
 def download(request):
@@ -124,7 +203,7 @@ def download(request):
         for t in received_data.keys():
             downloadList.append(t[8:])
 
-    print(downloadList)
+
     chinese_name= request.user.profile.chinese_name
     data=RegistrationTable.objects.filter(id__in=downloadList).order_by('id')
     generated_doc(chinese_name,data)
@@ -146,61 +225,3 @@ def download(request):
     response['Content-Type'] = 'application/octet-stream'
     response['Content-Disposition'] = 'attachment;filename="doc.zip"'
     return response
-
-
-@login_required
-def edit(request,id):
-    if request.user.has_perm('payment.edit_supplier_payment'):
-        data=RegistrationTable.objects.filter(id=id)[0]
-        return render(request, 'editPayment.html', locals())
-    else:
-        messages.success(request, '你没有权限访问这个页面')
-        return render(request, 'noPremission.html')
-
-
-@login_required
-def delete(request,id):
-    obj=RegistrationTable.objects.filter(id=id).update(deleted='1')
-    return HttpResponseRedirect('/payment/showAllPayment/')
-
-@login_required
-def editHandle(request):
-        chinese_name= request.user.profile.chinese_name
-        if request.user.has_perm('payment.edit_supplier_payment'):
-            if request.method == 'POST':             
-                received_data = dict(request.POST)
-                
-                del received_data['submit']
-            
-                # #删除值为空的字典
-                def changeListToString(data):
-                    result={}
-                    for i,j in data.items():                        
-                        if j[0]:      
-                            result[i]=j[0];
-                    return result
-                received_data=changeListToString (received_data)                               
-                if   received_data.get('amount_in_words')==None: 
-                    pass
-                else:
-                    pt=charToNumber()  
-                    received_data['amount_in_words']=pt.cwchange(float(received_data['amount_in_figures']))      
-                x={}
-                x['payment_date']=received_data['payment_date']
-                x['closing_date']=received_data['closing_date']
-                x['transfer_finance']=received_data['transfer_finance']
-                if received_data.get('closing_date')!=None:          
-                    cd=ClosingDate(x)                    
-                    received_data['expiring_date']= cd.getClosingDate()                
-
-                received_data['applicant']=chinese_name
-                received_data['deleted']=0
-                k = RegistrationTable(**received_data)     
-                k.save()
-
-                return HttpResponseRedirect('/payment/showAllPayment/')
-            else:
-                raise Http404
-        else:
-            messages.success(request, '你没有权限访问这个页面')
-            return render(request, 'noPremission.html')

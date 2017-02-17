@@ -126,7 +126,7 @@
                             <label for="amount_in_words" class="col-xs-2 control-label">大写金额</label>
                             <div class="col-xs-3">
                                 <input type="text" class="form-control" name="amount_in_words"
-                                       id="amount_in_words" placeholder="" value="{{data.amount_in_words}}">
+                                       id="amount_in_words" placeholder="" value="{% if data.amount_in_words %}{{data.amount_in_words}}{%endif%}">
                             </div>
      
                                                     <label for="payment_date" class="col-xs-1 control-label">付款期限</label>
@@ -154,7 +154,7 @@
                                                        <label for="quality_deduction" class="col-xs-2 control-label">到期日</label>
                             <div class="col-xs-3">
                                 <input type="text" class="form-control" name="expiring_date"
-                                       id="expiring_date" placeholder="" value="{{data.expiring_date|date:"Y-m-d"}}">
+                                       id="expiring_date" placeholder="" value="{% if data.expiring_date %}{{data.expiring_date|date:"Y-m-d"}}{%endif%}">
                             </div>
                         </div>
 

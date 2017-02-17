@@ -44,7 +44,7 @@ def upload_file(request):
                     return HttpResponseRedirect("/stockCode/showUnCode/")
                 else:
                     def writeExcel():
-                        with open(os.path.join("F:\\django_wzb\\wzb\\upload", 'target.xlsx'), 'wb+') as f:
+                        with open(os.path.join("F:\\upload", 'target.xlsx'), 'wb+') as f:
                             for chunk in myFile.chunks():      # 分块写入文件
                                 f.write(chunk)
                     try:

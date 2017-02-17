@@ -58,7 +58,7 @@ def handle_data(file, request):
 #读取上传后的excel文件
 def handle_uploaded_excel(file):
     pythoncom.CoInitializeEx(pythoncom.COINIT_MULTITHREADED)
-    file_name = r"F:\django_wzb\wzb\upload\target.xlsx"
+    file_name = r"F:\upload\target.xlsx"
     table = 'Sheet1'
     xlApp = win32com.client.Dispatch('Excel.Application')  # 打开EXCEL，这里不需改动
     xlApp.Visible = False

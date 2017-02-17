@@ -104,7 +104,7 @@ class ClosingDate():
                         monthAdd=monthAdd+1
                         day=min(closing_dateListInt)
                         return (monthAdd,day)
-                    if t>self.n:  
+                    if t>=self.n:  
                         day=t
                         return (monthAdd,day)   
         monthAdd,day=getDayMonth()

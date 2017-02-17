@@ -41,7 +41,17 @@
         return html.join('');
     }
 </script>
-
+<script>
+function selectAll(){
+	$(":checkbox").each(function(){
+	if($(this).prop("checked")){
+	$(this).prop("checked",false);
+	}else{
+	$(this).prop("checked",true);
+	}
+	});
+}
+</script>
 <div class="container wrap" style='{margin:0 auto} '>
     <h1>查看修改付款登记表</h1>
     <form method="post" action="">
@@ -76,17 +86,16 @@
             <tr class='warning'>
                 <!--<th data-field="state" data-checkbox="true"></th>-->
                 <th>导出</th>
-     
+                         <th>操作</th>
                 <th>最大编号</th>
                 <th data-sortable="true">填表日期</th>
-                <th>制单人</th>
                 <th>单据号</th>
                 <th data-sortable="true">所属公司</th>
                 <th data-sortable="true">收款人</th>
                 <th>开户行</th>
                 <th>银行账号</th>                
                 <th>小写金额</th>
-                <th>大写金额</th>
+                <!--<th>大写金额</th>-->
                 <!--<th>承兑汇票</th>
                 <th>转账支票</th>
                 <th>现金</th>-->
@@ -96,7 +105,7 @@
                 <th>付款期限</th>
                 <!--<th>入账日</th>-->
                 <th>到期日</th>    
-           
+                <th>    删除</th>            
        
             </tr>
         </thead>
@@ -104,17 +113,18 @@
             {% for k in b %}
             <tr>
                 <td><input type="checkbox" name="received{{k.id}}" id="receive{{k.id}}"  ></td>        
-                               
+                                <td>
+                    <a href="/payment/edit/{{k.id}}">                      <font                   color="red">编辑</font>                                                 
+                    </a>        
                 <td>{{k.max_num}}</td>
                 <td>{{k.record_date|date:"Y-m-d"}}</td>
-                <td>{{k.applicant}}</td>
                 <td>{{k.document_num}}</td>
                 <td>{{k.company_name}}</td>
                 <td>{{k.supplier_name}}</td>
                 <td>{{k.bank_of_deposit}}</td>
                 <td>{{k.bank_account}}</td>
                 <td>{{k.amount_in_figures}}</td>
-                <td>{{k.amount_in_words}}</td>
+                <!--<td>{{k.amount_in_words}}</td>-->
                 <!--<td>{{k.acceptance_bill}}</td>
                 <td>{{k.cash}}</td>
                 <td>{{k.cheque}}</td>-->
@@ -124,13 +134,22 @@
                 <td>{{k.payment_date}}</td>
                 <!--<td>{{k.posting_date}}</td>-->
                 <td>{{k.expiring_date|date:"Y-m-d"}}</td>         
-
+                <td>                 <a href="/payment/delete/{{k.id}}"> <font color="red">删除</font>                                                 
+                    </a>   </td>
             </tr>
             {%endfor%}
 
         </tbody>
     </table>
-   
+        <div class="col-md-4">
+        </div>
+        <div class="col-md-1">
+                <botton class="btn btn-success btn" onclick="selectAll()"><span class="label label-success m-l-xs">全选</span></botton>
+
+        </div>
+        <div class="col-md-1">
+             
+                <input class="btn btn-default" value=" 下载 " type="submit">          </div>
             </form>
 </div>
 

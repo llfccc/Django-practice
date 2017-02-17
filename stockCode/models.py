@@ -14,7 +14,7 @@ class CodeTable(models.Model):
     # uploader = models.CharField(max_length=100, null=True, verbose_name=u'上传人')
     applicant = models.CharField(max_length=100, verbose_name=u'申请人')
     application_time = models.DateTimeField(null=True, verbose_name=u'申请时间')
-    accounts_set = models.CharField(max_length=100, verbose_name=u'账套')
+    accounts_set = models.CharField(max_length=100,null=True,blank=True,  verbose_name=u'账套')
     material_category = models.CharField(max_length=100, verbose_name=u'物资类别')
     material_name = models.CharField(max_length=100, verbose_name=u'物资名称')
     brand = models.CharField(max_length=30, blank=True,null=True, verbose_name=u'品牌')

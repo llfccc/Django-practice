@@ -35,7 +35,4 @@ urlpatterns = [
     url(r'^supplierList/', include('supplierList.urls',namespace="supplierList")),
     url(r'^accounts/', include('accounts.urls')),
     url('^inbox/notifications/', include(notifications.urls, namespace='notifications')),
-
-
-    # url(r'^stockCode/', stockCode.urls),
 ]

@@ -25,7 +25,7 @@ class RegistrationTable(models.Model):
     applicant=models.CharField( max_length=255,blank=True, null=True)
     deleted=models.CharField( max_length=255,blank=True, null=True)
     def __unicode__(self):
-        return self.supplier_name
+        return self.max_num
 
     class Meta:
         permissions = (
@@ -42,8 +42,8 @@ class SupplierPayment(models.Model):
     closing_date = models.CharField(max_length=255, blank=True, null=True)  # Field renamed to remove unsuitable characters. Field renamed because it started with '_'. Field renamed because it ended with '_'. Field renamed because of name conflict.
     bank_account = models.CharField( max_length=255, blank=True, null=True)  # Field renamed to remove unsuitable characters. Field renamed because it started with '_'. Field renamed because it ended with '_'. Field renamed because of name conflict.
     payment_date = models.CharField( max_length=255, blank=True, null=True)  # Field renamed to remove unsuitable characters. Field renamed because it started with '_'. Field renamed because it ended with '_'. Field renamed because of name conflict.
-    def __unicode__(self):
-        return self.supplier_name
+    # def __unicode__(self):
+    #     return self.supplier_name
 
     class Meta:
         permissions = (

@@ -1,16 +1,17 @@
 function editCode(){
 
 		var p = {};
-		$("input[name='code']").each(function(){
-    		var o = new Object()
-			id=$(this).attr("id").substring(4);
+		$("input[name='transfer_finance']").each(function(){
+    		var o = new Object();
+
+			id=$(this).attr("id").substring(16);
 			value=$(this).val();
 			if (value){
-				o.code=value;
+				o.transfer_finance=value;
 			}else{
-			o.code="";
+			o.transfer_finance="";
 			}
-			p[id]=o
+			p[id]=o;
 		})
 
 	console.log(p);
@@ -19,9 +20,7 @@ function editCode(){
 
 		$.ajax({
 				  type: 'POST',
-					url:'../receiveCode/',
-				  //url: 'http://127.0.0.1:8000/stockCode/receiveCode/',
-					//url: 'http://192.168.8.179:1000/stockCode/receiveCode/',
+					url:'../updatePayment/',
 				  data: data,
 				  dataType: 'json'
         });

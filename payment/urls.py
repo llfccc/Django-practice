@@ -5,7 +5,7 @@ from . import views
 urlpatterns = [
     url(r'^showAllPayment/$', views.showAllPayment, name='showAllPayment'),
     url(r'^showPayment/$', views.showPayment, name='showPayment'),
-
+    url(r'^updatePayment/$', views.updatePayment, name='updatePayment'),
     url(r'^upload_file/$', views.upload_file, name='upload_file'),
     url(r'^edit/(\d+)$', views.edit, name='edit'),
     url(r'^delete/(\d+)$', views.delete, name='delete'),
@@ -13,4 +13,5 @@ urlpatterns = [
     url(r'^insertPayment/$', views.insertPayment, name='insertPayment'),
 
     url(r'^download/$', views.download, name='download'),
+
 ]

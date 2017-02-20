@@ -5,8 +5,6 @@ import time,datetime
 import os,sys
 import functools
 import pandas as pd
-# reload(sys)
-# sys.setdefaultencoding('utf8')
 import win32com.client
 import pythoncom
 from .models import RegistrationTable
@@ -92,6 +90,7 @@ def generated_doc(chinese_name,data,modelName="e:\\f.docx"):
         d=model_to_dict(d) 
         doc = DocxTemplate(modelName)
         d['record_date_c']=d['record_date'].strftime(u"%Y年 %m月 %d号")  
+        d['transfer_finance']=d['record_date'].strftime(u"%m-%d")
         context = { u"company_name" : d['company_name'],u"supplier_name" : d['supplier_name'],"acceptance_bill":d['acceptance_bill'],"cash":d['cash'],\
             u"amount_in_figures" : d['amount_in_figures'],"cheque":d['cheque'],\
             u"bank_of_deposit" : d['bank_of_deposit'],u"bank_account" : d['bank_account'],u"amount_in_words" : d['amount_in_words'],\

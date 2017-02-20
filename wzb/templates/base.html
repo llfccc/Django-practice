@@ -5,6 +5,9 @@
 
     <head>
         {% block head %} {% load staticfiles %}
+                {% block datetimepicker %}
+  
+       {% endblock datetimepicker %}
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="renderer"  content="webkit" />  
         <!-- <[if lt IE 9]>
@@ -47,23 +50,7 @@
         </div>
 
         {% endblock body %}     
-        {% block datetimepicker %}
 
-            <script type="text/javascript">
-    $('.form_datetime').datetimepicker({
-        weekStart: 1,
-        todayBtn: 1,
-        autoclose: 1,
-        minView: "month",
-        todayHighlight: 1,
-        startView: 2,
-        forceParse: 0,
-        showMeridian: 1,
-        language: 'zh-CN',
-    });
-</script>
-
-       {% endblock datetimepicker %}
         </body>
         {% endblock html %}
         </html>

@@ -1,0 +1,44 @@
+{% extends "base.html" %} {% block title %} 新增编码 {% endblock%} {% block head %} {{ block.super }} {% endblock%} {% block body %} {{ block.super }}
+
+
+    <link rel="stylesheet" href="//apps.bdimg.com/libs/jqueryui/1.10.4/css/jquery-ui.min.css">
+
+    <script src="//apps.bdimg.com/libs/jqueryui/1.10.4/jquery-ui.min.js"></script>
+    <script>
+        $(function () {
+            //供应商名字标签,自动完成
+            obj = {{supplier_name | safe}};
+            var nameTags = new Array();            
+            for (var i = 0; i < obj.length; i++) {
+                nameTags[i] = obj[i].supplier_name;
+            }
+            console.log(nameTags);
+            $("#supplier_name").autocomplete({
+                source: nameTags
+            });
+        });
+
+    </script>
+        
+<style>
+    .wrap {
+        margin: 0px auto;
+    }
+</style>
+
+    <div class="container wrap" style='{margin:0 auto} '>
+    <div class="container wrap" style='{margin:0 auto} '>
+      <div class="col-md-3 col-xm-4">
+
+        <form method="post" enctype="multipart/form-data">
+                <input type='hidden' name='csrfmiddlewaretoken' value='J6MXopDQOmEyakGatkv89WQfN0YbW4vLNPzgV3O4n8tKTdUkvJNAgd9UqYxycAyf' />
+          
+            <div class="form-group"><label class="control-label" for="supplier_name">供应商名称</label><input class="form-control" id="supplier_name" name="supplier_name" placeholder="供应商名称" title="" type="text" required /></div>
+<div class="form-group"><label class="control-label" for="id_company_name">公司名称</label><input class="form-control" id="id_company_name" name="company_name" placeholder="公司名称" title="" type="text" required /></div>
+<div class="form-group"><label class="control-label" for="id_document_num">发票号</label><input class="form-control" id="id_document_num" name="document_num" placeholder="发票号" title="" type="text" required /></div>
+<div class="form-group"><label class="control-label" for="id_amount_in_figures">金额</label><input class="form-control" id="id_amount_in_figures" name="amount_in_figures" placeholder="金额" step="any" title="" type="number" /></div>
+            <button class="btn btn-info" type="submit">提交</button>
+        </form>
+    </div>
+</div>
+{% endblock%}

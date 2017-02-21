@@ -18,6 +18,8 @@ from .forms import UploadFileForm,ApplicantForm
 import zipfile,datetime
 from django.http import HttpResponseRedirect ,StreamingHttpResponse
 from django.contrib import messages
+from django.core import serializers
+
 
 @login_required
 def upload_file(request):
@@ -65,6 +67,7 @@ def upload_file(request):
 @login_required
 def insertPayment(request):
     chinese_name = request.user.profile.chinese_name
+
     if request.user.has_perm('payment.edit_payment'):
         if request.method == 'POST':
             form_content = ApplicantForm(request.POST)
@@ -89,8 +92,13 @@ def insertPayment(request):
                 # add_note(request,request.user,message)
                 return HttpResponseRedirect('/payment/showPayment/')
         else:
+            db=SupplierPayment.objects
+            supplier_name=db.values("supplier_name").filter(supplier_name__isnull=False).annotate(sid=Count("supplier_name")).order_by("-id")
+            supplier_name=json.dumps(list(supplier_name))
+
+
             form = ApplicantForm(initial={'user_id':1})
-            return render(request, 'insertApplicant.html', locals())
+            return render(request, 'insertPayment.html', locals())
     else:
         messages.success(request, '你没有权限访问这个页面')
         return render(request, 'noPremission.html')
@@ -181,6 +189,21 @@ def updatePayment(request):
 def edit(request,id):
     if request.user.has_perm('payment.edit_payment'):
         data=RegistrationTable.objects.filter(id=id)[0]
+        supplier_name=SupplierPayment.objects.values("supplier_name").filter(supplier_name__isnull=False).annotate(sid=Count("supplier_name")).order_by("-id")
+        supplier_name=json.dumps(list(supplier_name))
+        Supplier = SupplierPayment.objects.all()
+        from collections import defaultdict
+        result = {} 
+        for t in Supplier:  
+            k=model_to_dict(t) 
+            if k['supplier_name']:   
+                if   result.has_key(k['supplier_name']): 
+                    result[k['supplier_name']][k['company_name']]=k                    
+                else:
+                    result[k['supplier_name']]={}
+                    result[k['supplier_name']][k['company_name']]=k           
+
+        result=json.dumps(result)
         return render(request, 'editPayment.html', locals())
     else:
         messages.success(request, '你没有权限访问这个页面')

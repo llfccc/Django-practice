@@ -13,15 +13,33 @@
     <script>
         $(function () {
             //供应商名字标签,自动完成
-            obj = {$data};
+            obj = {{supplier_name | safe}};
             var nameTags = new Array();
-
+            
             for (var i = 0; i < obj.length; i++) {
+     
                 nameTags[i] = obj[i].supplier_name;
             }
+
             $("#supplier_name").autocomplete({
                 source: nameTags
             });
+        });
+    </script>
+    <script>
+            $(function () {
+            //供应商名字标签,自动完成
+            obj = {{result | safe}};
+            var nameTags = new Array();
+            
+            for (var i = 0; i < obj.length; i++) {
+
+                nameTags[supplier_name] = obj[i].fields;
+            }
+            console.log(obj);
+            // $("#supplier_name").autocomplete({
+            //     source: nameTags
+            // });
         });
 
     </script>
@@ -55,7 +73,7 @@
                     id:<input type="text" style="display:none;" readonly name="id" value="{{data.id}}">
                     <input type="text" name="max_num" readonly value="{{data.max_num}}">
                     <div class="form-group col-xs-12">
-                        <label for="supplier_name" class="col-xs-2 control-label">所属公司</label>
+                        <label for="company_name" class="col-xs-2 control-label">所属公司</label>
 
                         <div class="col-xs-3 ui-widget">
                                          <input type="text" class="form-control" name="company_name"

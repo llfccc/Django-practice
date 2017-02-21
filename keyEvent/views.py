@@ -9,8 +9,8 @@ from supplierList.models import SupplierList
 from .models import KeyEvent
 from django.db.models import Count, Avg
 from django.contrib.auth.decorators import login_required, permission_required
-#生成pdf
-from reportlab.pdfgen import canvas
+
+
 from django.http import HttpResponse
 
 #@login_required

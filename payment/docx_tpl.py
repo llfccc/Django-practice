@@ -23,13 +23,11 @@ def handle_uploaded_excel():
     xlBook = xlApp.Workbooks.Open(file_name)  # 将D:\\1.xls改为要处理的excel文件路径
     xlSht = xlBook.Worksheets(table)  # 要处理的excel页，默认第一页是‘sheet1’
     rowcount = xlSht.UsedRange.Rows.Count
-    colcount = 17  # 读取几列xlSht.UsedRange.Columns.count
+    colcount = 25  # 读取几列xlSht.UsedRange.Columns.count
     data = xlSht.Range(xlSht.Cells(1, 1), xlSht.Cells(
         rowcount + 1, colcount + 1)).Value
     xlBook.Close(SaveChanges=1)  # 完成 关闭保存文件
-
     del xlApp
-
     return data
 
 def insert_db(data,SupplierPaymentDict,company_name,chinese_name):
@@ -38,7 +36,7 @@ def insert_db(data,SupplierPaymentDict,company_name,chinese_name):
     now_date=datetime.datetime.now()
 
     priceDF=pd.DataFrame(list(data[1:]),columns=data[0])
-    priceDF=pd.DataFrame(priceDF.groupby([u'供应商',u'发票号']).sum()[u'结算金额'])  
+    priceDF=pd.DataFrame(priceDF.groupby([u'供应商',u'发票号']).sum()[u'原币价税合计'])  
     priceDF.reset_index(level=0, inplace=True)
     priceDF.reset_index(level=0, inplace=True)    
     priceDF.columns = ['document_num','supplier_name','amount_in_figures']
@@ -58,7 +56,6 @@ def insert_db(data,SupplierPaymentDict,company_name,chinese_name):
     currentMax.append(cursor.fetchall()[0][0])
     cursor.close()
 
-
     list_to_insert = list()
     def df2list(x,currentMax):
         currentMax[0]+=1         
@@ -69,26 +66,23 @@ def insert_db(data,SupplierPaymentDict,company_name,chinese_name):
 
     #将df保存为一个列表，以便批量插入数据库
     resultDF.apply(lambda x:df2list(x,currentMax),axis=1)
-
     RegistrationTable.objects.bulk_create(list_to_insert)
 
     return 1
 
-def generated_doc(chinese_name,data,modelName="e:\\f.docx"):
+def generated_doc(chinese_name,data,):
     path=sys.path[0]+r"\\doc\\%s\\" %chinese_name
+    templetPath=sys.path[0]+"\\downloadModel\\fukuan.docx"
+
     try:
         shutil.rmtree(path)  
     except:
         pass
-
-    os.mkdir(path)  
-    
-    #path=r'e:'+r"\\doc\\%s\\" %chinese_name
-    doc = DocxTemplate(modelName)    
+    os.mkdir(path)    
 
     for d in data:
         d=model_to_dict(d) 
-        doc = DocxTemplate(modelName)
+        doc = DocxTemplate(templetPath)
         d['record_date_c']=d['record_date'].strftime(u"%Y年 %m月 %d号")  
         d['transfer_finance']=d['record_date'].strftime(u"%m-%d")
         context = { u"company_name" : d['company_name'],u"supplier_name" : d['supplier_name'],"acceptance_bill":d['acceptance_bill'],"cash":d['cash'],\

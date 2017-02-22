@@ -134,6 +134,7 @@ def showPayment(request):
         chinese_name = request.user.profile.chinese_name
         if request.method == 'POST':
             start_date=request.POST['start_date']
+            request.session["start_date"] = start_date
             end_date=request.POST['end_date']
             if not start_date:
                 start_date=time.strftime('%Y-%m-%d',time.localtime(time.time()))
@@ -143,7 +144,10 @@ def showPayment(request):
                 end_date =  datetime.datetime.strptime(end_date, "%Y-%m-%d").date()+ datetime.timedelta(days=1)
             b=RegistrationTable.objects.filter(deleted='0').filter(applicant=chinese_name).filter(record_date__range=(start_date, end_date)).order_by('-id')
         else:
-            start_date=time.strftime('%Y-%m-%d',time.localtime(time.time()))
+            if request.session.get("start_date"):
+                start_date=request.session.get("start_date")    
+            else:
+                start_date=time.strftime('%Y-%m-%d',time.localtime(time.time()))
             end_date=datetime.date.today() + datetime.timedelta(days=1)
             b=RegistrationTable.objects.filter(deleted='0').filter(applicant=chinese_name).filter(record_date__range=(start_date, end_date)).order_by('-id')   
         return render(request, 'showPayment.html', locals())
@@ -157,33 +161,26 @@ def showPayment(request):
 def updatePayment(request): 
     chinese_name = request.user.profile.chinese_name
     if request.method == 'POST':        
-        received_data = json.loads(request.body)     
-    
-    def changeListToString(data):
-        result={}
-        for i,j in data.items():                        
-            if j[0]:      
-                result[i]=j[0];
-        return result
+        received_data = json.loads(request.body)    
 
     for k, v in received_data.items():
-        pass
+        t=RegistrationTable.objects.filter(id=k)[0]
+        pt=charToNumber()
+        amount_in_words=pt.cwchange(float(t.amount_in_figures)) 
+
         if v['transfer_finance']:
-            transfer_finance=v["transfer_finance"]
-            t=RegistrationTable.objects.filter(id=k)[0]
-            pt=charToNumber()
-            amount_in_words=pt.cwchange(float(t.amount_in_figures))       
+            transfer_finance=v["transfer_finance"]  
             x={}
             x['payment_date']=t.payment_date
             x['closing_date']=t.closing_date
             x['transfer_finance']=transfer_finance    
             cd=ClosingDate(x)                    
-            expiring_date= cd.getClosingDate()  
-            RegistrationTable.objects.filter(id=k).update(transfer_finance=transfer_finance,applicant=chinese_name,deleted=0,expiring_date=expiring_date,amount_in_words=amount_in_words)
+            expiring_date=cd.getClosingDate()
+        else:
+            expiring_date=""    
 
-    return str("success")
-
-
+        RegistrationTable.objects.filter(id=k).update(transfer_finance=transfer_finance,applicant=chinese_name,deleted=0,expiring_date=expiring_date,amount_in_words=amount_in_words)
+    return HttpResponse()
 
 @login_required
 def edit(request,id):

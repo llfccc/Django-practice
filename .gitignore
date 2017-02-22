@@ -6,5 +6,7 @@ doc
 downloadModel
 .node-gyp
 .npm
+.vscode
+.idea
 *.pyc
 *.docx

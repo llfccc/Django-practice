@@ -8,17 +8,28 @@
         $(function () {
             //供应商名字标签,自动完成
             obj = {{supplier_name | safe}};
-            var nameTags = new Array();            
-            for (var i = 0; i < obj.length; i++) {
+            var nameTags = new Array();
+            
+            for (var i = 0; i < obj.length; i++) {     
                 nameTags[i] = obj[i].supplier_name;
             }
-            console.log(nameTags);
+
             $("#supplier_name").autocomplete({
                 source: nameTags
             });
-        });
 
-    </script>
+            obj = {{company_name | safe}};
+            var nameTags2 = new Array();
+            
+            for (var i = 0; i < obj.length; i++) {     
+                nameTags2[i] = obj[i].company_name;
+            }
+
+            $("#company_name").autocomplete({
+                source: nameTags2
+            });
+        });
+    </script> 
         
 <style>
     .wrap {
@@ -34,7 +45,7 @@
                 <input type='hidden' name='csrfmiddlewaretoken' value='J6MXopDQOmEyakGatkv89WQfN0YbW4vLNPzgV3O4n8tKTdUkvJNAgd9UqYxycAyf' />
           
             <div class="form-group"><label class="control-label" for="supplier_name">供应商名称</label><input class="form-control" id="supplier_name" name="supplier_name" placeholder="供应商名称" title="" type="text" required /></div>
-<div class="form-group"><label class="control-label" for="id_company_name">公司名称</label><input class="form-control" id="id_company_name" name="company_name" placeholder="公司名称" title="" type="text" required /></div>
+<div class="form-group"><label class="control-label" for="id_company_name">公司名称</label><input class="form-control" id="company_name" name="company_name" placeholder="公司名称" title="" type="text" required /></div>
 <div class="form-group"><label class="control-label" for="id_document_num">发票号</label><input class="form-control" id="id_document_num" name="document_num" placeholder="发票号" title="" type="text" required /></div>
 <div class="form-group"><label class="control-label" for="id_amount_in_figures">金额</label><input class="form-control" id="id_amount_in_figures" name="amount_in_figures" placeholder="金额" step="any" title="" type="number" /></div>
             <button class="btn btn-info" type="submit">提交</button>

@@ -142,6 +142,7 @@ function selectAll(){
                             <span class="input-group-addon"><span class="glyphicon glyphicon-remove" onclick="$('#transfer_finance{{k.id}}').val('')"></span></span>
                       <script type="text/javascript">
     $('.form_datetime').datetimepicker({
+         format: 'yyyy-mm-dd',
         weekStart: 1,
         todayBtn: 1,
         autoclose: 1,
@@ -171,7 +172,7 @@ function selectAll(){
         <div class="col-md-4">
         </div>
                 <div class="col-md-1">
-            <botton class="btn btn-success btn" onclick="editCode()"><span class="label label-success m-l-xs">提交</span></botton>
+            <botton class="btn btn-success btn" onclick="editPayment()"><span class="label label-success m-l-xs">提交</span></botton>
         </div>
         <div class="col-md-1">
                 <botton class="btn btn-success btn" onclick="selectAll()"><span class="label label-success m-l-xs">全选</span></botton>

@@ -93,8 +93,10 @@ def insertPayment(request):
                 return HttpResponseRedirect('/payment/showPayment/')
         else:
             db=SupplierPayment.objects
-            supplier_name=db.values("supplier_name").filter(supplier_name__isnull=False).annotate(sid=Count("supplier_name")).order_by("-id")
+            supplier_name=db.values("supplier_name").filter(supplier_name__isnull=False).distinct()
             supplier_name=json.dumps(list(supplier_name))
+            company_name=SupplierPayment.objects.values("company_name").filter(company_name__isnull=False).distinct()
+            company_name=json.dumps(list(company_name))
 
 
             form = ApplicantForm(initial={'user_id':1})
@@ -167,20 +169,18 @@ def updatePayment(request):
     for k, v in received_data.items():
         pass
         if v['transfer_finance']:
-            try:
-                transfer_finance=v["transfer_finance"].split(" ")[0]
-                t=RegistrationTable.objects.filter(id=k)[0]
-                pt=charToNumber()
-                amount_in_words=pt.cwchange(float(t.amount_in_figures))       
-                x={}
-                x['payment_date']=t.payment_date
-                x['closing_date']=t.closing_date
-                x['transfer_finance']=transfer_finance    
-                cd=ClosingDate(x)                    
-                expiring_date= cd.getClosingDate()  
-                RegistrationTable.objects.filter(id=k).update(transfer_finance=transfer_finance,applicant=chinese_name,deleted=0,expiring_date=expiring_date,amount_in_words=amount_in_words)
-            except:
-                pass
+            transfer_finance=v["transfer_finance"]
+            t=RegistrationTable.objects.filter(id=k)[0]
+            pt=charToNumber()
+            amount_in_words=pt.cwchange(float(t.amount_in_figures))       
+            x={}
+            x['payment_date']=t.payment_date
+            x['closing_date']=t.closing_date
+            x['transfer_finance']=transfer_finance    
+            cd=ClosingDate(x)                    
+            expiring_date= cd.getClosingDate()  
+            RegistrationTable.objects.filter(id=k).update(transfer_finance=transfer_finance,applicant=chinese_name,deleted=0,expiring_date=expiring_date,amount_in_words=amount_in_words)
+
     return str("success")
 
 
@@ -189,8 +189,12 @@ def updatePayment(request):
 def edit(request,id):
     if request.user.has_perm('payment.edit_payment'):
         data=RegistrationTable.objects.filter(id=id)[0]
-        supplier_name=SupplierPayment.objects.values("supplier_name").filter(supplier_name__isnull=False).annotate(sid=Count("supplier_name")).order_by("-id")
+        supplier_name=SupplierPayment.objects.values("supplier_name").filter(supplier_name__isnull=False).distinct()
         supplier_name=json.dumps(list(supplier_name))
+        company_name=SupplierPayment.objects.values("company_name").filter(company_name__isnull=False).distinct()
+        company_name=json.dumps(list(company_name))
+
+
         Supplier = SupplierPayment.objects.all()
         from collections import defaultdict
         result = {} 
@@ -232,15 +236,20 @@ def editHandle(request):
                 received_data=changeListToString (received_data)                               
                 if  not received_data.get('amount_in_words'): 
                     pt=charToNumber()  
-                    received_data['amount_in_words']=pt.cwchange(float(received_data['amount_in_figures']))      
-                x={}
-                x['payment_date']=received_data['payment_date']
-                x['closing_date']=received_data['closing_date']
-                x['transfer_finance']=received_data['transfer_finance']
-                if not received_data.get('expiring_date'):          
-                    cd=ClosingDate(x)                    
-                    received_data['expiring_date']= cd.getClosingDate()                
-
+                    received_data['amount_in_words']=pt.cwchange(float(received_data['amount_in_figures']))
+                #计算付款期限
+                if not received_data.get('expiring_date'):
+                    if received_data.get('transfer_finance'):
+                        try:                      
+                            x={}
+                            x['payment_date']=received_data['payment_date']
+                            x['closing_date']=received_data['closing_date']
+                            x['transfer_finance']=received_data['transfer_finance']                                  
+                            cd=ClosingDate(x)                    
+                            received_data['expiring_date']= cd.getClosingDate()
+                        except:
+                            messages.success(request, '缺少必须的项')
+                            return HttpResponseRedirect('/payment/edit/%s' %received_data['id'])
                 received_data['applicant']=chinese_name
                 received_data['deleted']=0
                 k = RegistrationTable(**received_data)     

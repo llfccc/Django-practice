@@ -254,6 +254,7 @@ def editHandle(request):
                 received_data['deleted']=0
                 k = RegistrationTable(**received_data)     
                 k.save()
+
                 return HttpResponseRedirect('/payment/showPayment/')
             else:
                 raise Http404
@@ -270,7 +271,6 @@ def download(request):
             id=t[8:]
             if id.isdigit():
                 downloadList.append(id)
-
 
     chinese_name= request.user.profile.chinese_name
     data=RegistrationTable.objects.filter(id__in=downloadList).order_by('id')

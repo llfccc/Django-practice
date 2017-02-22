@@ -42,7 +42,7 @@
         });
         return html.join('');
     }
-
+</script>
 <script>
 function selectAll(){
 	$(":checkbox").each(function(){
@@ -88,7 +88,7 @@ function selectAll(){
     <table id="table" data-toggle="table" data-toolbar="#toolbar" class="table table-bordered table-striped" data-show-export="true" data-search="true" data-filter-control="true" data-show-columns="true" data-show-multi-sort="true" data-sort-priority='[{"sortName": "github.count.forks","sortOrder":"desc"},{"sortName":"github.count.stargazers","sortOrder":"desc"}]'
         data-show-pagination-switch="true" data-pagination="true" data-page-size="20" data-page-list="20,50,100,500]" data-detail-view="true" data-detail-formatter="detailFormatter">
         <thead>
-            <tr class='warning'>
+            <tr >
                 <!--<th data-field="state" data-checkbox="true"></th>-->
                 <th>导出</th>
                          <th>操作</th>
@@ -118,7 +118,8 @@ function selectAll(){
         <tbody>
             {% for k in b %}
             <tr>
-                <td><input type="checkbox" name="received{{k.id}}" id="receive{{k.id}}"  ></td>        
+         
+                <td>   {%if k.expiring_date %}<input type="checkbox" name="received{{k.id}}" id="receive{{k.id}}"  >{%else%}<font color="red" size="1">有错</font>{%endif%}</td>        
                                 <td>
                     <a href="/payment/edit/{{k.id}}">                      <font                   color="red">编辑</font>                                                 
                     </a>        

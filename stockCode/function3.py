@@ -4,9 +4,8 @@ import numpy as np
 import shutil
 import os,sys
 
+
 # 用来生成批量导入表
-
-
 def processExcel(codeDataset, materialDict, measurementDict, WarehouseCodeDict):
     # codeDF是编码表，materialDF是物资属性表，measurementDF是计量单位表
     codeDF = pd.DataFrame.from_dict(codeDataset)
@@ -110,10 +109,8 @@ def generate_excel(encodeDF, inventoryDF, fileName):
     sheet8[u'存货自定义项8'] = encodeDF.ix[:, 'grade']  # 等级
     sheet8[u'存货自定义项9'] = encodeDF.ix[:, 'vender']  # 厂家
 
-
     if not encodeDF.empty:
-
-        codeFilePath = u"E:\\code\\" + fileName + u"--A 编码表" + ".xls"
+        codeFilePath = sys.path[0]+u'\\download\\code\\' + fileName + u"--A 编码表" + ".xls"
         writer = pd.ExcelWriter(codeFilePath)
         sheet1.to_excel(writer, index=None)
         sheet2.to_excel(writer, u'控制', index=None)
@@ -128,14 +125,13 @@ def generate_excel(encodeDF, inventoryDF, fileName):
         sheetNone.to_excel(writer, u'核算自由项档案', index=None)
         writer.save()
 
-
     #判断是否仓库编码这一列全为空，全为空则不生成excel
     num_null=inventoryDF[inventoryDF.loc[:,'warehouse_code'].isnull()].shape[0]
     num_all=inventoryDF.shape[0]
     if not inventoryDF.empty and num_null != num_all:
 
   
-        inventoryControlPath = u"E:\\code\\" + fileName + u"--B 存货对照表" + ".xls"
+        inventoryControlPath = sys.path[0]+u'\\download\\code\\' + fileName + u"--B 存货对照表" + u".xls"
         sheet20 = pd.DataFrame()
         sheet20[u'仓库编码'] = inventoryDF.ix[:, 'warehouse_code']
         sheet20[u'存货编码'] = inventoryDF.ix[:, 'recommend']

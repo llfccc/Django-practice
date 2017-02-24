@@ -284,7 +284,7 @@ def downloadZip(request):
                 arcname = pathfile[pre_len:].strip(os.path.sep)  # 相对路径
                 zipf.write(pathfile, arcname)
         zipf.close()
-    source_dir = sys.path[0]+'\\download\\code'
+    source_dir = sys.path[0]+r'\\download\\code'
     output_filename = sys.path[0]+r"\\download\\code.zip"
     make_zip(source_dir, output_filename)
 

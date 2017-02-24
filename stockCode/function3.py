@@ -2,7 +2,7 @@
 import pandas as pd
 import numpy as np
 import shutil
-import os
+import os,sys
 
 # 用来生成批量导入表
 
@@ -147,7 +147,7 @@ def generate_excel(encodeDF, inventoryDF, fileName):
 
 #移除上一次产生的文件
 def removeFile():
-    dirPath=r'E:\code'
+    dirPath=sys.path[0]+'\\download\\code'
     if not os.path.isdir(dirPath):
         return
     files = os.listdir(dirPath)

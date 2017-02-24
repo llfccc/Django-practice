@@ -2,8 +2,9 @@ blob-store
 compile-cache
 dev
 storage
-doc
-downloadModel
+download
+templet
+code
 .node-gyp
 .npm
 .vscode

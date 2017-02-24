@@ -284,8 +284,8 @@ def downloadZip(request):
                 arcname = pathfile[pre_len:].strip(os.path.sep)  # 相对路径
                 zipf.write(pathfile, arcname)
         zipf.close()
-    source_dir = 'e:\\code'
-    output_filename = "e:\\code.zip"
+    source_dir = sys.path[0]+'\\download\\code'
+    output_filename = sys.path[0]+r"\\download\\code.zip"
     make_zip(source_dir, output_filename)
 
     response = StreamingHttpResponse(open(output_filename, "rb").read())
@@ -297,8 +297,7 @@ def downloadZip(request):
 @login_required
 def downloadModel(request):
 
-    output_filename = "f:\\django_wzb\\wzb\\downloadModel\\codeV3.xlsx"
-
+    output_filename = sys.path[0]+r'\\templet\\codeV3.xlsx'
     response = StreamingHttpResponse(open(output_filename, "rb").read())
     response['Content-Type'] = 'application/octet-stream'
     response['Content-Disposition'] = 'attachment;filename="codeV3.xlsx"'

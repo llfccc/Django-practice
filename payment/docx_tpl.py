@@ -72,7 +72,7 @@ def insert_db(data,SupplierPaymentDict,company_name,chinese_name):
 
 def generated_doc(chinese_name,data,):
     path=sys.path[0]+r"\\doc\\%s\\" %chinese_name
-    templetPath=sys.path[0]+"\\downloadModel\\fukuan.docx"
+    templetPath=sys.path[0]+"\\templet\\fukuan.docx"
 
     try:
         shutil.rmtree(path)  

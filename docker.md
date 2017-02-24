@@ -30,4 +30,11 @@
 那么我们的需要交互的文件夹的就钦定“D:/kaggle”了
 6. 运行镜像
 
-```docker run --name kaggle  -v D:/kaggle:/tmp/working/kaggle  -w=/tmp/working -p 8888:8888 -d  -it kaggle/python  jupyter notebook --no-browser --ip="0.0.0.0" --notebook-dir=/tmp/working```  
+```docker run --name kaggle  -v D:/kaggle:/tmp/working/kaggle  -w=/tmp/working -p 8888:8888 -d  -it kaggle/python  jupyter notebook --no-browser --ip="0.0.0.0" --notebook-dir=/tmp/working``` 
+简单解释一下  --name kaggle 代表我们给它起名叫kaggle 制定一个交换目录是win下的d:/kaggle 和 linux下的/tmp/working/kaggle 端口号为8888，-d 代表在后台运行  ，jupyter notebook --no-browser 代表不用浏览器的方式运行notebook，
+7. 运行notebook
+这个时候用你win10的自己装的浏览器就可以访问notebook了，而且访问的是docker里的notebook
+8. 输入notebook 的code
+docker exec -it kaggle bash
+9. 停止容器
+docker stop kaggle

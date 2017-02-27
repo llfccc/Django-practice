@@ -88,13 +88,17 @@ class ClosingDate():
             try:
                 closing_dateListInt.append(int(t))
             except:
-                pass
+                closing_dateListInt=[0]
         #获取最后付款时间       
-
+        if closing_dateListInt:
+            pass
+        else:
+            closing_dateListInt=[0]
         #求天数
         def getDayMonth():
             day=0
-            monthAdd=0
+            monthAdd=0  
+                
             if closing_dateListInt[0]==0 and len(closing_dateListInt)==1:
                 day=self.n
                 return (monthAdd,day)     

@@ -83,7 +83,7 @@ def insertPayment(request):
                 SupplierPaymentDict=[]
                 for k in SupplierPaymentCode:
                     SupplierPaymentDict.append(model_to_dict(k))
-                data=[(1,1,u'结算单号',u'计算日期',u'供应商',2,u'发票号',4,5,6,2,1,u'结算金额',5,2,3, None),
+                data=[(1,1,u'结算单号',u'计算日期',u'供应商',2,u'发票号',4,5,6,2,1,u'原币价税合计',5,2,3, None),
                     (u'1', None, u'000000000008305', 1, supplier_name,u'RG20161202585',  u'0000002500', u'Z1400040', u'15kg/\u888b',  u'kg', 1500.0, 5.2,amount_in_figures, 5.2, 7800.0, u'\u674e\u8bd7\u871c', None)]
                 result=insert_db(data,SupplierPaymentDict,company_name,chinese_name)       
 
@@ -176,10 +176,9 @@ def updatePayment(request):
             x['transfer_finance']=transfer_finance    
             cd=ClosingDate(x)                    
             expiring_date=cd.getClosingDate()
+            RegistrationTable.objects.filter(id=k).update(transfer_finance=transfer_finance,applicant=chinese_name,deleted=0,expiring_date=expiring_date,amount_in_words=amount_in_words)
         else:
-            expiring_date=""    
-
-        RegistrationTable.objects.filter(id=k).update(transfer_finance=transfer_finance,applicant=chinese_name,deleted=0,expiring_date=expiring_date,amount_in_words=amount_in_words)
+            pass  
     return HttpResponse()
 
 @login_required

@@ -4,7 +4,7 @@ from django.db import models
 
 
 class RegistrationTable(models.Model):
-    max_num = models.FloatField(blank=True, null=True)  # Field renamed to remove unsuitable characters. Field renamed because it started with '_'. Field renamed because it ended with '_'.
+    max_num = models.IntegerField(blank=True, null=True)  # Field renamed to remove unsuitable characters. Field renamed because it started with '_'. Field renamed because it ended with '_'.
     company_name = models.CharField(max_length=255, blank=True, null=True)  # Field renamed to remove unsuitable characters. Field renamed because it started with '_'. Field renamed because it ended with '_'. Field renamed because of name conflict.
     supplier_name = models.CharField( max_length=255, blank=True, null=True)  # Field renamed to remove unsuitable characters. Field renamed because it started with '_'. Field renamed because it ended with '_'. Field renamed because of name conflict.
     bank_of_deposit = models.CharField(max_length=255, blank=True, null=True)  # Field renamed to remove unsuitable characters. Field renamed because it started with '_'. Field renamed because it ended with '_'. Field renamed because of name conflict.
@@ -25,7 +25,8 @@ class RegistrationTable(models.Model):
     applicant=models.CharField( max_length=255,blank=True, null=True)
     deleted=models.CharField( max_length=255,blank=True, null=True)
     def __unicode__(self):
-        return self.max_num
+        return "{0}".format(self.max_num)
+
 
     class Meta:
         permissions = (

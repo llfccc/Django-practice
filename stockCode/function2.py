@@ -4,6 +4,7 @@ from .models import  CodeTable
 from operator import itemgetter, attrgetter
 from django.forms.models import model_to_dict
 
+
 def findMaxNumber():
     cursor = connection.cursor()
     cursor.execute("""SELECT distinct  U8code   FROM stockcode_codetable""")

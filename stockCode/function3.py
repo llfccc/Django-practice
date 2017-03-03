@@ -15,7 +15,7 @@ def processExcel(codeDataset, materialDict, measurementDict, WarehouseCodeDict):
 
     lenDF = len(codeDF)
 
-    account_count=[]       #保存有多少个账套生成了
+    account_count=[]       #保存具体有多少个账套生成了
 
     if not codeDF.empty:
         codeDF = pd.merge(codeDF, materialDF, how='left', left_on='material_category',

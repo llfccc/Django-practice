@@ -82,11 +82,11 @@ def insert_db(result, request):
         k.user_id = request.user.id
         k.group_name = Profile.objects.get(
             chinese_name=k.applicant).group_name
-        k.save()
-        # try:
-        #     k.save()
-        # except:
-        #     return u"数据插入不成功，可能是因为缺少必填项"
+        # k.save()
+        try:
+            k.save()
+        except:
+            return u"有部分数据项插入不成功，可能是因为缺少必填项"
 
 
 def add_note(request, receiver, message):

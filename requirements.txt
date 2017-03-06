@@ -1,7 +1,9 @@
-django==1.10.5
+django
 pymysql
 django-bootstrap3
 django-el-pagination
 django-notifications-hq
 echarts-python
 docxtpl
+pypiwin32
+pandas

@@ -11,8 +11,11 @@ from .models import RegistrationTable
 from django.forms.models import model_to_dict  
 from django.db import connection
 import shutil  
-reload(sys)
-sys.setdefaultencoding('utf-8')
+
+
+# if "g:\\anaconda3" not in sys.path:
+#     sys.path.append("g:\\anaconda3")
+
 #读取上传后的excel文件
 def handle_uploaded_excel():
     pythoncom.CoInitializeEx(pythoncom.COINIT_MULTITHREADED)

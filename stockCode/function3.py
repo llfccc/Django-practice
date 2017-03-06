@@ -75,7 +75,7 @@ def generate_excel(encodeDF, inventoryDF, fileName):
         sheet1[u'存货大类编码']=sheet1[u'存货大类编码'].apply(f)
 
     #替换901账套中的p010等为U18
-    if fileName=="901":
+    if fileName=="901" or fileName=="905":
         replace_list=["P010","P020","P030","P040","P050","P060","P070","P080","P090","P100","X010","X020","X030","X040","X050","X060","X070"]
         def f(df):
             if df in replace_list:        

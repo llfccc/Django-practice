@@ -18,7 +18,8 @@ import sys
 # sys.setdefaultencoding('utf8')
 import win32com.client
 import pythoncom
-
+# if "g:\\anaconda3" not in sys.path:
+#     sys.path.append("g:\\anaconda3")
 
 #转换浮点数为数字
 def convertFloatChar(model):

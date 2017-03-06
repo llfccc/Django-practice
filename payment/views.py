@@ -12,8 +12,8 @@ from django.contrib.auth.decorators import login_required, permission_required
 
 from django.forms.models import model_to_dict
 from django.http import HttpResponse
-from docx_tpl import handle_uploaded_excel,insert_db,generated_doc
-from convertData import charToNumber,ClosingDate
+from .docx_tpl import handle_uploaded_excel,insert_db,generated_doc
+from .convertData import charToNumber,ClosingDate
 from .forms import UploadFileForm,ApplicantForm
 import zipfile,datetime
 from django.http import HttpResponseRedirect ,StreamingHttpResponse

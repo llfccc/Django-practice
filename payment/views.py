@@ -19,6 +19,8 @@ import zipfile,datetime
 from django.http import HttpResponseRedirect ,StreamingHttpResponse
 from django.contrib import messages
 from django.core import serializers
+import wzb.settings
+PROJECT_ROOT=wzb.settings.PROJECT_ROOT
 
 
 @login_required
@@ -281,8 +283,8 @@ def download(request):
                 zipf.write(pathfile, arcname)
         zipf.close()
 
-    source_dir=sys.path[0]+r"\\doc\\%s\\" %chinese_name
-    output_filename = sys.path[0]+"%s.zip" %chinese_name
+    source_dir=PROJECT_ROOT+r"\\doc\\%s\\" %chinese_name
+    output_filename = PROJECT_ROOT+"%s.zip" %chinese_name
     make_zip(source_dir, output_filename)
 
     response = StreamingHttpResponse(open(output_filename, "rb").read())

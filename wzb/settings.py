@@ -78,6 +78,8 @@ STATIC_URL = '/static/'
 
 STATICFILES_DIRS = (os.path.join('static'), )
 
+PROJECT_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__),".."))  
+
 #扩展user字段
 # AUTH_USER_MODEL = "wzb.NewUser"
 

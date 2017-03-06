@@ -4,6 +4,9 @@ import numpy as np
 import shutil
 import os,sys
 
+import wzb.settings
+PROJECT_ROOT=wzb.settings.PROJECT_ROOT
+
 
 # 用来生成批量导入表
 def processExcel(codeDataset, materialDict, measurementDict, WarehouseCodeDict):
@@ -110,7 +113,7 @@ def generate_excel(encodeDF, inventoryDF, fileName):
     sheet8[u'存货自定义项9'] = encodeDF.ix[:, 'vender']  # 厂家
 
     if not encodeDF.empty:
-        codeFilePath = sys.path[0]+u'\\download\\code\\' + fileName + u"--A 编码表" + ".xls"
+        codeFilePath = PROJECT_ROOT+u'\\download\\code\\' + fileName + u"--A 编码表" + ".xls"
         writer = pd.ExcelWriter(codeFilePath)
         sheet1.to_excel(writer, index=None)
         sheet2.to_excel(writer, u'控制', index=None)
@@ -131,7 +134,7 @@ def generate_excel(encodeDF, inventoryDF, fileName):
     if not inventoryDF.empty and num_null != num_all:
 
   
-        inventoryControlPath = sys.path[0]+u'\\download\\code\\' + fileName + u"--B 存货对照表" + u".xls"
+        inventoryControlPath = PROJECT_ROOT+u'\\download\\code\\' + fileName + u"--B 存货对照表" + u".xls"
         sheet20 = pd.DataFrame()
         sheet20[u'仓库编码'] = inventoryDF.ix[:, 'warehouse_code']
         sheet20[u'存货编码'] = inventoryDF.ix[:, 'recommend']
@@ -143,7 +146,7 @@ def generate_excel(encodeDF, inventoryDF, fileName):
 
 #移除上一次产生的文件
 def removeFile():
-    dirPath=sys.path[0]+'\\download\\code'
+    dirPath=PROJECT_ROOT+'\\download\\code'
     if not os.path.isdir(dirPath):
         return
     files = os.listdir(dirPath)

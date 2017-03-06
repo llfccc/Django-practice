@@ -74,8 +74,10 @@ def insert_db(data,SupplierPaymentDict,company_name,chinese_name):
     return 1
 
 def generated_doc(chinese_name,data,):
-    path=sys.path[0]+r"\\doc\\%s\\" %chinese_name
-    templetPath=sys.path[0]+"\\templet\\fukuan.docx"
+    import wzb.settings
+    PROJECT_ROOT=wzb.settings.PROJECT_ROOT
+    path=PROJECT_ROOT+r"\\doc\\%s\\" %chinese_name
+    templetPath=PROJECT_ROOT+"\\templet\\fukuan.docx"
 
     try:
         shutil.rmtree(path)  

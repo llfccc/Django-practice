@@ -20,6 +20,9 @@ from django.forms.models import model_to_dict
 from echarts import Echart, Legend, Bar, Axis
 from django.http import HttpResponseRedirect ,StreamingHttpResponse
 
+import wzb.settings
+PROJECT_ROOT=wzb.settings.PROJECT_ROOT
+
 # 接收上传文件并读取保存到数据库中
 
 @login_required
@@ -284,8 +287,8 @@ def downloadZip(request):
                 arcname = pathfile[pre_len:].strip(os.path.sep)  # 相对路径
                 zipf.write(pathfile, arcname)
         zipf.close()
-    source_dir = sys.path[0]+r'\\download\\code'
-    output_filename = sys.path[0]+r"\\download\\code.zip"
+    source_dir =PROJECT_ROOT+r'\\download\\code'
+    output_filename = PROJECT_ROOT+r"\\download\\code.zip"
     make_zip(source_dir, output_filename)
 
     response = StreamingHttpResponse(open(output_filename, "rb").read())
@@ -296,8 +299,10 @@ def downloadZip(request):
 
 @login_required
 def downloadModel(request):
-
-    output_filename = sys.path[0]+r'\\templet\\codeV3.xlsx'
+    import wzb.settings
+    PROJECT_ROOT=wzb.settings.PROJECT_ROOT
+    output_filename = PROJECT_ROOT+r'\templet\codeV3.xlsx'
+    print(output_filename)
     response = StreamingHttpResponse(open(output_filename, "rb").read())
     response['Content-Type'] = 'application/octet-stream'
     response['Content-Disposition'] = 'attachment;filename="codeV3.xlsx"'

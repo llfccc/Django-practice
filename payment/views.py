@@ -1,7 +1,7 @@
 # coding=utf-8
 from django.shortcuts import render
 
-from django.http import HttpResponseRedirect, HttpResponse, Http404
+from django.http import HttpResponseRedirect, HttpResponse, Http404,FileResponse
 from django.shortcuts import render_to_response, render
 import os,sys,json,time
 # sys.path.append("..")
@@ -16,7 +16,7 @@ from .docx_tpl import handle_uploaded_excel,insert_db,generated_doc
 from .convertData import charToNumber,ClosingDate
 from .forms import UploadFileForm,ApplicantForm
 import zipfile,datetime
-from django.http import HttpResponseRedirect ,StreamingHttpResponse
+from django.http import HttpResponseRedirect 
 from django.contrib import messages
 from django.core import serializers
 import wzb.settings
@@ -284,10 +284,12 @@ def download(request):
         zipf.close()
 
     source_dir=PROJECT_ROOT+r"\\doc\\%s\\" %chinese_name
-    output_filename = PROJECT_ROOT+"%s.zip" %chinese_name
+    output_filename = PROJECT_ROOT+r"\doc\%s.zip" %(chinese_name,)
+    output_filename = PROJECT_ROOT+r"\doc\%s.zip" %"a"
     make_zip(source_dir, output_filename)
 
-    response = StreamingHttpResponse(open(output_filename, "rb").read())
+
+    response = FileResponse(open(output_filename, 'rb'))
     response['Content-Type'] = 'application/octet-stream'
     response['Content-Disposition'] = 'attachment;filename="doc.zip"'
     return response

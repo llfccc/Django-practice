@@ -1,7 +1,7 @@
 blob-store
 compile-cache
 dev
-storage
+storage 
 download
 templet
 code
@@ -14,3 +14,4 @@ upload
 *.docx
 *.xlsx
 *.xls
+*.zip

@@ -1,5 +1,5 @@
 # coding=utf-8
-from django.http import HttpResponseRedirect, HttpResponse, Http404
+from django.http import HttpResponseRedirect, HttpResponse, Http404,FileResponse
 from django.shortcuts import render_to_response, render
 from .forms import UploadFileForm,ApplicantForm
 from .function import handle_data,add_note,send_notificiton
@@ -18,7 +18,7 @@ from django.forms.models import model_to_dict
 # reload(sys)
 # sys.setdefaultencoding('utf8')
 from echarts import Echart, Legend, Bar, Axis
-from django.http import HttpResponseRedirect ,StreamingHttpResponse
+from django.http import HttpResponseRedirect
 
 import wzb.settings
 PROJECT_ROOT=wzb.settings.PROJECT_ROOT
@@ -37,9 +37,7 @@ def upload_file(request):
                 htmlInt=int(request.POST.get('randomInt','0'))
                 sessionInt=int(request.session.get("postToken",default=1))
                 request.session["postToken"]=0
-                # print (htmlInt)
-                # print('********')
-                # print (sessionInt)
+
                 if sessionInt!=htmlInt:
                     # 不存在合法Token,该表单为重复提交
                     # return HttpResponse("请不要点击多次提交按钮")
@@ -60,7 +58,6 @@ def upload_file(request):
                     message=u'提交了一批文档'
                     add_note(request,request.user,message)
                     response = HttpResponseRedirect('/stockCode/showUnCode/')
-                    # print(insert_result)
 
                     if insert_result:
                         messages.success(request, insert_result)
@@ -179,7 +176,7 @@ def showAlreadyCode(request):
 def varifyCode(request):
     if request.user.has_perm('stockCode.varify_application'):
         group_name = request.user.profile.group_name
-        # print(group_name)
+
         # test=CodeTable.objects.get(id=21).profile.group_name
 
         # .filter(user.profile.group_name=group_name)
@@ -287,14 +284,17 @@ def downloadZip(request):
                 arcname = pathfile[pre_len:].strip(os.path.sep)  # 相对路径
                 zipf.write(pathfile, arcname)
         zipf.close()
-    source_dir =PROJECT_ROOT+r'\\download\\code'
-    output_filename = PROJECT_ROOT+r"\\download\\code.zip"
+    source_dir =PROJECT_ROOT+r'\download\code'
+    output_filename = PROJECT_ROOT+r"\download\code.zip"
+
     make_zip(source_dir, output_filename)
 
-    response = StreamingHttpResponse(open(output_filename, "rb").read())
+    response = FileResponse(open(output_filename, 'rb'))
     response['Content-Type'] = 'application/octet-stream'
-    response['Content-Disposition'] = 'attachment;filename="code.zip"'
+    response['Content-Disposition'] = 'attachment;filename="{0}"'.format('code.zip')
     return response
+
+
 
 
 @login_required
@@ -302,8 +302,8 @@ def downloadModel(request):
     import wzb.settings
     PROJECT_ROOT=wzb.settings.PROJECT_ROOT
     output_filename = PROJECT_ROOT+r'\templet\codeV3.xlsx'
-    print(output_filename)
-    response = StreamingHttpResponse(open(output_filename, "rb").read())
+
+    response = FileResponse(open(output_filename, 'rb'))
     response['Content-Type'] = 'application/octet-stream'
     response['Content-Disposition'] = 'attachment;filename="codeV3.xlsx"'
     return response

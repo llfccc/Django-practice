@@ -88,7 +88,7 @@ def generated_doc(chinese_name,data,):
     for d in data:
         d=model_to_dict(d) 
         doc = DocxTemplate(templetPath)
-        d['record_date_c']=d['record_date'].strftime(u"%Y年 %m月 %d号")  
+        d['record_date_c']="%s年 %s月 %s号"%(d['record_date'].year,d['record_date'].month,d['record_date'].day) 
         d['transfer_finance']=d['record_date'].strftime(u"%m-%d")
         context = { u"company_name" : d['company_name'],u"supplier_name" : d['supplier_name'],"acceptance_bill":d['acceptance_bill'],"cash":d['cash'],\
             u"amount_in_figures" : d['amount_in_figures'],"cheque":d['cheque'],\

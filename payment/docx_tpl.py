@@ -1,9 +1,7 @@
 #coding=utf-8
 from docxtpl import DocxTemplate
-import functools
 import time,datetime
 import os,sys
-import functools
 import pandas as pd
 import win32com.client
 import pythoncom
@@ -12,9 +10,6 @@ from django.forms.models import model_to_dict
 from django.db import connection
 import shutil  
 
-
-# if "g:\\anaconda3" not in sys.path:
-#     sys.path.append("g:\\anaconda3")
 
 #读取上传后的excel文件
 def handle_uploaded_excel():

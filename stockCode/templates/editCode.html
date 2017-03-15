@@ -58,19 +58,19 @@
             <td>{{k.material_category}}</td>
             <td>{{k.material_name}}</td>
             <td>{{k.model}}</td>
-            <td>{{k.accounts_set}}</td>
-            <td>{{k.brand}}</td>
-            <td>{{k.serial_number}}</td>
+            <td>{%if k.accounts_set%}{{k.accounts_set}}{%endif%}</td>
+            <td>{%if k.brand%}{{k.brand}}{%endif%}</td>
+            <td>{%if k.serial_number%}{{k.serial_number}}{%endif%}</td>
 
             <td>{{k.unit}}</td>
 
-            <td>{{k.remark}}</td>
-            <td>{{k.demand_department}}</td>
-            <td>{{k.equipment_name}}</td>
-            <td>{{k.equipment_model}}</td>
-            <td>{{k.manufacturers}}</td>
-            <td>{{k.grade}}</td>
-            <td>{{k.vender}}</td>
+            <td>{%if k.remark%}{{k.remark}}{%endif%}</td>
+            <td>{%if k.demand_department%}{{k.demand_department}}{%endif%}</td>
+            <td>{%if k.equipment_name%}{{k.equipment_name}}{%endif%}</td>
+            <td>{%if k.equipment_model%}{{k.equipment_model}}{%endif%}</td>
+            <td>{%if k.manufacturers%}{{k.manufacturers}}{%endif%}</td>
+            <td>{%if k.grade%}{{k.grade}}{%endif%}</td>
+            <td>{%if k.vender%}{{k.vender}}{%endif%}</td>
             <td>{{k.applicant}}</td>
             <td>{{k.varified_time|date:"Y-m-d"}}</td>
         </tr>

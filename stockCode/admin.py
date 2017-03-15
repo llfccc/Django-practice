@@ -9,8 +9,8 @@ from django.contrib.auth.models import User
 class CodeTableAdmin(admin.ModelAdmin):
     search_fields = ('id','applicant', 'material_name','model','U8code')
     list_display = ('id','application_time', 'applicant', 'material_name','U8code')
-    list_filter = ('application_time',)
-    ordering = ('application_time',)
+    list_filter = ('application_time','applicant')
+    ordering = ('-id','application_time',)
 
 class MaterialPropertyAdmin(admin.ModelAdmin):
     search_fields = ('material_category', 'scope','remark','attribute')
@@ -29,7 +29,7 @@ class WarehouseAdmin(admin.ModelAdmin):
     search_fields = ('material_category', 'accounts_set','warehouse_code','category_chinese_name')
     list_display = ('material_category', 'accounts_set', 'warehouse_code','category_chinese_name')
     list_filter = ('material_category',)
-    ordering = ('material_category','accounts_set',)
+    ordering = ('id','material_category','accounts_set',)
 
 admin.site.register(CodeTable, CodeTableAdmin)
 admin.site.register(MaterialProperty,MaterialPropertyAdmin)

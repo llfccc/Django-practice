@@ -32,7 +32,6 @@ def insert_db(data,SupplierPaymentDict,company_name,chinese_name):
 
     supplierDF=pd.DataFrame.from_dict(SupplierPaymentDict)
     now_date=datetime.datetime.now()
-
     priceDF=pd.DataFrame(list(data[1:]),columns=data[0])
     priceDF=pd.DataFrame(priceDF.groupby([u'供应商',u'发票号']).sum()[u'原币价税合计'])  
     priceDF.reset_index(level=0, inplace=True)
@@ -44,7 +43,10 @@ def insert_db(data,SupplierPaymentDict,company_name,chinese_name):
     priceDF['cash']='×'
     priceDF['acceptance_bill']='×'
     priceDF['deleted']='0'
-    priceDF['document_num']=priceDF['document_num'].astype(int)
+    try:
+        priceDF['document_num']=priceDF['document_num'].astype('int')
+    except:
+        priceDF['document_num']=priceDF['document_num']
     resultDF = pd.merge(priceDF,supplierDF , how='left', left_on=['supplier_name','company_name'],
                     right_on=['supplier_name','company_name'], suffixes=['_l', '_r']) 
 

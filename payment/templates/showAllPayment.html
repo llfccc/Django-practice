@@ -1,4 +1,5 @@
-{% extends "base.html" %} {% block title %} 修改付款登记表 {% endblock%} {% block body %} {{ block.super }} {% load el_pagination_tags %}
+{% extends "base.html" %} {% block title %} 修改付款登记表 {% endblock%} {% block body %} {{ block.super }} {% load el_pagination_tags
+%}
 <style>
     .wrap {
         margin: 0px auto;
@@ -11,7 +12,7 @@
 <script src="{% static 'js/jquery-ui.min.js' %}  "></script>
 <!--日期选择器-->
 <script>
-    $(function() {
+    $(function () {
         $("#start_date").datepicker();
         $("#end_date").datepicker();
         var val = 'yy-mm-dd';
@@ -22,8 +23,8 @@
 
 <script>
     var $table = $('#table');
-    $(function() {
-        $('#toolbar').find('select').change(function() {
+    $(function () {
+        $('#toolbar').find('select').change(function () {
             $table.bootstrapTable('refreshOptions', {
                 exportDataType: $(this).val()
             });
@@ -33,7 +34,7 @@
 <script>
     function detailFormatter(index, row) {
         var html = [];
-        $.each(row, function(key, value) {
+        $.each(row, function (key, value) {
             if (key.substring(0, 1) != "_") {
                 html.push('<p><b>' + key + ':</b> ' + value + '</p>');
             }
@@ -70,69 +71,76 @@
   </select>
     </div>
     <form method="post" action="/payment/download/">
-    <table id="table" data-toggle="table" data-toolbar="#toolbar" class="table table-bordered table-striped" data-show-export="true" data-search="true" data-filter-control="true" data-show-columns="true" data-show-multi-sort="true" data-sort-priority='[{"sortName": "github.count.forks","sortOrder":"desc"},{"sortName":"github.count.stargazers","sortOrder":"desc"}]'
-        data-show-pagination-switch="true" data-pagination="true" data-page-size="20" data-page-list="20,50,100,500]" data-detail-view="true" data-detail-formatter="detailFormatter">
-        <thead>
-            <tr class='warning'>
-                <!--<th data-field="state" data-checkbox="true"></th>-->
-                <th>导出</th>
-     
-                <th>最大编号</th>
-                <th data-sortable="true">填表日期</th>
-                <th>制单人</th>
-                <th>单据号</th>
-                <th data-sortable="true">所属公司</th>
-                <th data-sortable="true">收款人</th>
-                <th>开户行</th>
-                <th>银行账号</th>                
-                <th>小写金额</th>
-                <th>大写金额</th>
-                <th>承兑汇票</th>
-                <th>转账支票</th>
-                <th>现金</th>
-                <th>转(收票日/审核日)</th>
-                <!--<th>提前付款</th>-->
-                <th>货期</th>
-                <th>付款期限</th>
-                <!--<th>入账日</th>-->
-                <th>到期日</th>    
-           
-       
-            </tr>
-        </thead>
-        <tbody>
-            {% for k in b %}
-            <tr>
-                <td><input type="checkbox" name="received{{k.id}}" id="receive{{k.id}}"  ></td>        
-                               
-                <td>{{k.max_num}}</td>
-                <td>{{k.record_date|date:"Y-m-d"}}</td>
-                <td>{{k.applicant}}</td>
-                <td>{{k.document_num}}</td>
-                <td>{{k.company_name}}</td>
-                <td>{{k.supplier_name}}</td>
-                <td>{{k.bank_of_deposit}}</td>
-                <td>'{{k.bank_account}}</td>
-                <td>{{k.amount_in_figures}}</td>
-                <td>{{k.amount_in_words}}</td>
-                <td>{{k.acceptance_bill}}</td>
-                
-                <td>{{k.cheque}}</td>
-                <td>{{k.cash}}</td>
-                <td>{{k.transfer_finance}}</td>
-                <!--<td>{{k.payment_in_advance}}</td>-->
-                <td>{{k.closing_date}}</td>
-                <td>{{k.payment_date}}</td>
-                <!--<td>{{k.posting_date}}</td>-->
-                <td>{{k.expiring_date|date:"Y-m-d"}}</td>         
+        <table id="table" data-toggle="table" data-toolbar="#toolbar" class="table table-bordered table-striped" data-show-export="true"
+            data-search="true" data-filter-control="true" data-show-columns="true" data-show-multi-sort="true" data-sort-priority='[{"sortName": "github.count.forks","sortOrder":"desc"},{"sortName":"github.count.stargazers","sortOrder":"desc"}]'
+            data-show-pagination-switch="true" data-pagination="true" data-page-size="20" data-page-list="20,50,100,500]" data-detail-view="true"
+            data-detail-formatter="detailFormatter">
+            <thead>
+                <tr class='warning'>
+                    <!--<th data-field="state" data-checkbox="true"></th>-->
+                    <th>导出</th>
+                    <th>序号</th>
+                    <th data-sortable="true">供应商名称</th>
+                    <th>小写金额</th>
+                    <th>开户银行</th>
+                    <th>银行账号</th>
+                    <th>用途</th>
+                    <th data-sortable="true">入账日</th>
+                    <th>单据号</th>
+                    <th>收票日</th>                    
+                    <th>付款时间</th>
+                    <th>转凭证编号</th>
+                    <th>转财务</th>
+                    <th>到期日</th>
+                    <th>承兑汇票</th>
+                    <th>转账支票</th>
+                    <th>现金</th>
+                    <th>制单人</th>
+                    <th data-sortable="true">所属公司</th>
+                    <th>大写金额</th>
+                    <!--<th>提前付款</th>-->
+                    <th>货期</th>
+                    <!--<th>入账日</th>-->
 
-            </tr>
-            {%endfor%}
 
-        </tbody>
-    </table>
-   
-            </form>
+                </tr>
+            </thead>
+            <tbody>
+                {% for k in b %}
+                <tr>
+                    <td><input type="checkbox" name="received{{k.id}}" id="receive{{k.id}}"></td>
+
+                    <td>{{k.max_num}}</td>
+                    <td>{{k.supplier_name}}</td>
+                    <td>{{k.amount_in_figures}}</td>
+                    <td>{{k.bank_of_deposit}}</td>
+                    <td>'{{k.bank_account}}</td>
+                    <td></td>
+                    <td>{{k.record_date|date:"Y-m-d"}}</td>
+                    <!--<td>{{k.posting_date}}</td>-->
+                    <td>{{k.document_num}}</td>
+                    <td>{{k.closing_date}}</td>           
+                         <td></td>      
+                 
+                        <td></td>  
+                        
+                    <td>{{k.transfer_finance|date:"Y-m-d"}}</td>
+                       <td>{{k.expiring_date|date:"Y-m-d"}}</td>
+                    <td>{{k.acceptance_bill}}</td>
+                    <td>{{k.cheque}}</td>
+                    <td>{{k.cash}}</td>
+                    <td>{{k.applicant}}</td>
+                    <td>{{k.company_name}}</td>
+                    <td>{{k.amount_in_words}}</td>
+                    <!--<td>{{k.payment_in_advance}}</td>-->                
+                    <td>{{k.payment_date}}</td>
+                </tr>
+                {%endfor%}
+
+            </tbody>
+        </table>
+
+    </form>
 </div>
 
 {% endblock body %}

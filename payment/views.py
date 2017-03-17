@@ -26,7 +26,7 @@ PROJECT_ROOT=wzb.settings.PROJECT_ROOT
 @login_required
 def upload_file(request):
     chinese_name = request.user.profile.chinese_name
-    if request.user.has_perm('stockCode.add_codetable'):
+    if request.user.has_perm('payment.edit_payment'):
         if request.method == 'POST':
             form_content =UploadFileForm(request.POST, request.FILES)
             if form_content.is_valid():
@@ -79,14 +79,14 @@ def insertPayment(request):
                 cleaned_data['application_time']=datetime.datetime.now()
                 company_name = form_content.cleaned_data['company_name']
                 supplier_name = form_content.cleaned_data['supplier_name']
-                amount_in_figures = form_content.cleaned_data['amount_in_figures']
-
+                amount_in_figures = form_content.cleaned_data['amount_in_figures']                
+                document_num = form_content.cleaned_data['document_num']
                 SupplierPaymentCode=SupplierPayment.objects.all()
                 SupplierPaymentDict=[]
                 for k in SupplierPaymentCode:
                     SupplierPaymentDict.append(model_to_dict(k))
                 data=[(1,1,u'结算单号',u'计算日期',u'供应商',2,u'发票号',4,5,6,2,1,u'原币价税合计',5,2,3, None),
-                    (u'1', None, u'000000000008305', 1, supplier_name,u'RG20161202585',  u'0000002500', u'Z1400040', u'15kg/\u888b',  u'kg', 1500.0, 5.2,amount_in_figures, 5.2, 7800.0, u'\u674e\u8bd7\u871c', None)]
+                    (u'1', None, u'000000000008305', 1, supplier_name,u'RG20161202585',  document_num, u'Z1400040', u'15kg/\u888b',  u'kg', 1500.0, 5.2,amount_in_figures, 5.2, 7800.0, u'\u674e\u8bd7\u871c', None)]
                 result=insert_db(data,SupplierPaymentDict,company_name,chinese_name)       
 
                 messages.success(request, '添加成功，请确认是否已包含所有条目')
@@ -119,11 +119,11 @@ def showAllPayment(request):
                 end_date=datetime.date.today() + datetime.timedelta(days=1)
             else:
                 end_date =  datetime.datetime.strptime(end_date, "%Y-%m-%d").date()+ datetime.timedelta(days=1)
-            b=RegistrationTable.objects.filter(deleted='0').filter(record_date__range=(start_date, end_date)).order_by('-id')
+            b=RegistrationTable.objects.filter(deleted='0').filter(record_date__range=(start_date, end_date)).order_by('document_num')  
         else:
             start_date=time.strftime('%Y-%m-%d',time.localtime(time.time()))
             end_date=datetime.date.today() + datetime.timedelta(days=1)
-            b=RegistrationTable.objects.filter(deleted='0').filter(record_date__range=(start_date, end_date)).order_by('-id') 
+            b=RegistrationTable.objects.filter(deleted='0').filter(record_date__range=(start_date, end_date)).order_by('document_num')  
         return render(request, 'showAllPayment.html', locals())
     else:
         messages.success(request, '你没有权限访问这个页面')
@@ -144,14 +144,14 @@ def showPayment(request):
                 end_date=datetime.date.today() + datetime.timedelta(days=1)
             else:
                 end_date =  datetime.datetime.strptime(end_date, "%Y-%m-%d").date()+ datetime.timedelta(days=1)
-            b=RegistrationTable.objects.filter(deleted='0').filter(applicant=chinese_name).filter(record_date__range=(start_date, end_date)).order_by('-id')
+            b=RegistrationTable.objects.filter(deleted='0').filter(applicant=chinese_name).filter(record_date__range=(start_date, end_date)).order_by('document_num')  
         else:
             if request.session.get("start_date"):
                 start_date=request.session.get("start_date")    
             else:
                 start_date=time.strftime('%Y-%m-%d',time.localtime(time.time()))
             end_date=datetime.date.today() + datetime.timedelta(days=1)
-            b=RegistrationTable.objects.filter(deleted='0').filter(applicant=chinese_name).filter(record_date__range=(start_date, end_date)).order_by('-id')   
+            b=RegistrationTable.objects.filter(deleted='0').filter(applicant=chinese_name).filter(record_date__range=(start_date, end_date)).order_by('document_num')   
         return render(request, 'showPayment.html', locals())
     else:
         messages.success(request, '你没有权限访问这个页面')
@@ -199,7 +199,7 @@ def edit(request,id):
         for t in Supplier:  
             k=model_to_dict(t) 
             if k['supplier_name']:   
-                if   result.has_key(k['supplier_name']): 
+                if   k['supplier_name'] in  result: 
                     result[k['supplier_name']][k['company_name']]=k                    
                 else:
                     result[k['supplier_name']]={}
@@ -283,7 +283,7 @@ def download(request):
                 zipf.write(pathfile, arcname)
         zipf.close()
 
-    source_dir=PROJECT_ROOT+r"\\doc\\%s\\" %chinese_name
+    source_dir=PROJECT_ROOT+r"\\doc\\%s" %chinese_name
     output_filename = PROJECT_ROOT+r"\doc\%s.zip" %(chinese_name,)
     output_filename = PROJECT_ROOT+r"\doc\%s.zip" %"a"
     make_zip(source_dir, output_filename)

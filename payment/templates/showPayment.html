@@ -92,7 +92,7 @@ function selectAll(){
                 <!--<th data-field="state" data-checkbox="true"></th>-->
                 <th>导出</th>
                          <th>操作</th>
-                <th>最大编号</th>
+                <th data-sortable="true">最大编号</th>
                 <th data-sortable="true">填表日期</th>
                 <th>单据号</th>
                 <th data-sortable="true">所属公司</th>
@@ -139,7 +139,7 @@ function selectAll(){
                 <td>{{k.cheque}}</td>-->
                 <td>
                                             <div class="input-group date col-md-5" id="transfer_financetime{{k.id}}">
-                            <input style="width:110px"class="form-control form_datetime" type="text" name="transfer_finance" id="transfer_finance{{k.id}}" {%if k.transfer_finance%}value="{{k.transfer_finance}}" {%endif%}/>
+                            <input style="width:110px"class="form-control form_datetime" type="text" name="transfer_finance" id="transfer_finance{{k.id}}" {%if k.transfer_finance%}value="{{k.transfer_finance|date:"Y-m-d"}}" {%endif%}/>
                             <span class="input-group-addon"><span class="glyphicon glyphicon-remove" onclick="$('#transfer_finance{{k.id}}').val('')"></span></span>
                       <script type="text/javascript">
     $('.form_datetime').datetimepicker({

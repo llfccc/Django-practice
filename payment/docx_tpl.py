@@ -83,13 +83,14 @@ def generated_doc(chinese_name,data,):
     for d in data:
         d=model_to_dict(d) 
         doc = DocxTemplate(templetPath)
-        d['record_date_c']="%s年 %s月 %s号"%(d['record_date'].year,d['record_date'].month,d['record_date'].day) 
-        d['transfer_finance']=d['record_date'].strftime(u"%m-%d")
+        #d['record_date_c']="%s年 %s月 %s号"%(d['record_date'].year,d['record_date'].month,d['record_date'].day) 
+        d['transfer_finance']=d['transfer_finance'].strftime(u"%m-%d")
+        d['amount_in_figures']='{:,.2f}'.format(d['amount_in_figures'])
         context = { u"company_name" : d['company_name'],u"supplier_name" : d['supplier_name'],"acceptance_bill":d['acceptance_bill'],"cash":d['cash'],\
             u"amount_in_figures" : d['amount_in_figures'],"cheque":d['cheque'],\
             u"bank_of_deposit" : d['bank_of_deposit'],u"bank_account" : d['bank_account'],u"amount_in_words" : d['amount_in_words'],\
             "max_num":d['max_num'],"document_num":d['document_num'],"expiring_date":d['expiring_date'],"closing_date":d['closing_date'],"payment_date":d['payment_date'],\
-            "transfer_finance":d['transfer_finance'],"record_date":d['record_date'],"record_date_c":d['record_date_c']  }
+            "transfer_finance":d['transfer_finance'],"record_date":d['record_date']  }
         doc.render(context)
         fullPath=path+"%s--%s.docx" %(context['max_num'],context['supplier_name'])
         doc.save(fullPath)

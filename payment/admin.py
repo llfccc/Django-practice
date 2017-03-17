@@ -3,7 +3,7 @@ from .models import RegistrationTable,SupplierPayment
 # Register your models here.
 class RegistrationTableAdmin(admin.ModelAdmin):
     search_fields = ('id','max_num', 'applicant','company_name','supplier_name')
-    list_display = ('id','record_date', 'applicant', 'company_name','supplier_name')
+    list_display = ('id','max_num','record_date', 'applicant', 'company_name','supplier_name')
     list_filter = ('company_name',)
     ordering = ('record_date',)
 # class SupplierPaymentAdmin(admin.ModelAdmin):
